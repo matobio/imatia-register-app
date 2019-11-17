@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.elastic_hours">
+    package="com.example.imatia_register_app">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     

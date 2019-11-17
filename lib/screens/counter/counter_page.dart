@@ -1,4 +1,4 @@
-import 'package:elastic_hours/resources/utils/Login.dart';
+import 'package:imatia_register_app/resources/utils/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../drawer.dart';

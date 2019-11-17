@@ -1,10 +1,10 @@
-import 'package:elastic_hours/screens/home_page.dart';
-import 'package:elastic_hours/screens/ring.dart';
+import 'package:imatia_register_app/screens/home_page.dart';
+import 'package:imatia_register_app/screens/ring.dart';
 import 'package:flutter/material.dart';
-import 'package:elastic_hours/resources/utils/LocalStorageUtils.dart';
-import 'package:elastic_hours/resources/oauth/aad_oauth.dart';
-import 'package:elastic_hours/resources/oauth/microsoft-oauth_config.dart';
-import 'package:elastic_hours/resources/utils/EmployeeDataGetter.dart';
+import 'package:imatia_register_app/resources/utils/LocalStorageUtils.dart';
+import 'package:imatia_register_app/resources/oauth/aad_oauth.dart';
+import 'package:imatia_register_app/resources/oauth/microsoft-oauth_config.dart';
+import 'package:imatia_register_app/resources/utils/EmployeeDataGetter.dart';
 import 'AppUtils.dart';
 
 final AadOAuth oauth = new AadOAuth(config);

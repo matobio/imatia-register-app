@@ -1,4 +1,4 @@
-import 'package:elastic_hours/resources/utils/Constants.dart';
+import 'package:imatia_register_app/resources/utils/Constants.dart';
 import 'model/config.dart';
 
 final String tennant = "common";

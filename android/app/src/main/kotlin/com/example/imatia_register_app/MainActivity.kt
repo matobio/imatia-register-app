@@ -1,4 +1,4 @@
-package com.example.elastic_hours
+package com.example.imatia_register_app 
 
 import android.os.Bundle
 

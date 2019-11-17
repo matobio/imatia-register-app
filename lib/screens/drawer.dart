@@ -1,6 +1,6 @@
-import 'package:elastic_hours/screens/weekly/weekly_page.dart';
+import 'package:imatia_register_app/screens/weekly/weekly_page.dart';
 import 'package:flutter/material.dart';
-import 'package:elastic_hours/resources/utils/Login.dart';
+import 'package:imatia_register_app/resources/utils/Login.dart';
 import '../resources/oauth/aad_oauth.dart';
 import '../resources/oauth/microsoft-oauth_config.dart';
 import 'counter/counter_page.dart';
