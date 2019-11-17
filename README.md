@@ -10,3 +10,6 @@ This app allows you to register your working time and to display information abo
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+![screenshots1](screenshots/screenshots1.PNG)
