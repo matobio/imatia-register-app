@@ -267,6 +267,7 @@ Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDat
 
 
     List<dynamic> list = data['data']['presence_control_hours_id'];
+    list = list == null ? new List() : list;
     for( var i = 0 ; i < list.length; i++ ) { 
 
       DateTime date = DateTime.fromMillisecondsSinceEpoch(data['data']['init_date'][i]);
