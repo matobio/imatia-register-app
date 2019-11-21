@@ -469,7 +469,7 @@ class Model {
     double hours = getTotalWeekHours();
 
     int differenceInHours = hours.toInt();
-    int differenceInMinutes = (hours % 60).toInt();
+    int differenceInMinutes = ((hours * 60) % 60).toInt();
 
     return differenceInHours.toString() + "h " + differenceInMinutes.toString() + "min";
   }
