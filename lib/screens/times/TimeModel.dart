@@ -1,3 +1,4 @@
+import 'package:imatia_register_app/resources/utils/DateTimeUtils.dart';
 import 'package:intl/intl.dart';
 
 class TimeModel {
@@ -20,6 +21,15 @@ class TimeModel {
     return DateFormat('yyyy/MM/dd').format(DateTime.fromMillisecondsSinceEpoch(this.initDate));
   }
 
+  String getDatePretty(){
+    if(this.initDate == null){
+      return "";
+    }
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(this.initDate);
+
+    return getDayOfWeekAsString(date.weekday) + " " + date.day.toString() + ", " + getMonthAsString(date.month);
+  }
+
   String getInitDate(){
     if(this.initDate == null){
       return "";
@@ -39,5 +49,13 @@ class TimeModel {
       return "";
     }
     return this.hours;
+  }
+
+  DateTime getInitDateWithoutTime(){
+    if(this.initDate == null){
+      return null;
+    }
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(this.initDate);
+    return DateTime(date.year, date.month, date.day, 0, 0, 0);
   }
 }

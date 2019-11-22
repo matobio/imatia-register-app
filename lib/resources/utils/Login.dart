@@ -32,7 +32,7 @@ Future<bool> login(BuildContext context) async {
 }
 
 void logout(BuildContext context) async {
-  // final AadOAuth oauth = new AadOAuth(config);
+  
   await oauth.logout();
   cleanStorage();
   Navigator.push( context, MaterialPageRoute(builder: (context) => MyHomePage()), );
@@ -43,8 +43,14 @@ Future<bool> checkLogin() async {
 
   
   await oauth.loadTokenToCache();
+  // String accessToken = await oauth.getAccessToken();
+  // int employeeId = await getEmployeeIdFromUserMail(accessToken);
+
+  // if(employeeId == null){
+  //   return false;
+  // }
   if(oauth.tokenIsValid()){
     return true;
   }
-  return false;
+  return true;
 }

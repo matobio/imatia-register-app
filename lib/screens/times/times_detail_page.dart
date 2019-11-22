@@ -161,6 +161,7 @@ class _InsertTimePageState extends State<InsertTimePage> {
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
                     context: context,
+                    locale: const Locale('es','ES'),
                     firstDate: DateTime(1900),
                     initialDate: currentValue ?? DateTime.now(),
                     lastDate: DateTime(2100));

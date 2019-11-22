@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'screens/home_page.dart';
 
@@ -18,6 +19,16 @@ class MyApp extends StatelessWidget {
         
       ),
       home: MyHomePage(),
+
+       localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+          const Locale('en'), // English
+          const Locale('es'), // Spanish
+        ],
     );
   }
 }

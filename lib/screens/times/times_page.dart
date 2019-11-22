@@ -157,111 +157,129 @@ class _TimesPageState extends State<TimesPage> {
   }
 
   Widget _buildRow(TimeModel pair, int index) {
-    return Dismissible(
-      key: Key(UniqueKey().toString()),
-      background: Container(color: Colors.white),
-      direction: DismissDirection.startToEnd,
-      confirmDismiss: (DismissDirection direction) async {
-        return _deleteTime(pair.presenceControlHoursId, index);
-      },
-      child: 
-      InkWell(
-        onTap: (){
-          navigateToDetailTimePage(pair);
-        },
-        child: Container(
-          child: 
-          Column(
+
+    return Column(
+      children: <Widget>[
+        getRowWeekDate(pair, index),
+        Dismissible(
+          key: Key(UniqueKey().toString()),
+          background: Container(color: Colors.white),
+          direction: DismissDirection.startToEnd,
+          confirmDismiss: (DismissDirection direction) async {
+            return _deleteTime(pair.presenceControlHoursId, index);
+          },
+          child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Column(
+              InkWell(
+                onTap: (){
+                  navigateToDetailTimePage(pair);
+                },
+                child: Container(
+                  child:  Column(
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
-                        child: Column(
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Row(                        
                           children: <Widget>[
-                            Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Center(
-                                    child: 
-                                      Padding(
-                                        padding: EdgeInsets.only(bottom: 5),
-                                        child: Text(
-                                          pair.getEndDate(),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  height: 70,
+                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Center(
+                                        child: Text(pair.getInitDate(),
                                           style: _biggerFont,
                                         ),
-                                      )
+                                      ),
+                                      Center(
+                                        child: Text(" - ",
+                                          style: _biggerFont,
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(pair.getEndDate(),
+                                          style: _biggerFont,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            Container(
-                              child:
+                            Column(
+                              children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Center(
-                                    child: 
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          pair.getInitDate(),
-                                          style: _biggerFont,
-                                        ),
-                                      )
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5,right: 5),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(Icons.arrow_right),
+                                          Text(
+                                            pair.getHours(),
+                                            style:  TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.amber,
+                                              fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
-                                ),
+                                )
+                              ],
                             ),
                           ],
                         ),
-                      ), 
+                      ),
+                      Container(
+                        height: double.minPositive,
+                        alignment: Alignment.bottomCenter,
+                        child: Divider(),
+                      ),
                     ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: 
-                              Padding(
-                                padding: EdgeInsets.only(left: 20, right: 30),
-                                child: Text(
-                                  pair.getDate(),
-                                  style: _biggerFont,
-                                ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 5,right: 5),
-                            child: 
-                              Text(
-                                pair.getHours(),
-                                style: _biggerFont,
-                              ),
-                            )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
+                  )
+                ),
               ),
-              Divider(),
             ],
-          )
-        ),
-      ),
-      
+          ),
+        )
+      ],
     );
+  }
+
+  Widget getRowWeekDate(TimeModel pair, int index){
+   
+    if(index == 0 || (index >= 1 && this.listOfTimes[index].getInitDateWithoutTime() != this.listOfTimes[index-1].getInitDateWithoutTime())){
+      return Column(
+        children: <Widget>[
+           Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 10, top: 5),
+            child: Text(pair.getDatePretty(),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.cyanAccent,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 6),
+            child: Divider(
+              
+              thickness: 2,
+              color: Colors.cyan,
+            ),
+          ),
+          
+        ],
+      );     
+    }
+    return SizedBox.shrink();
   }
   
 }

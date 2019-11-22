@@ -1,3 +1,4 @@
+import 'package:imatia_register_app/resources/utils/DateTimeUtils.dart';
 import 'package:imatia_register_app/resources/utils/EmployeeDataGetter.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
@@ -119,14 +120,26 @@ class _MonthlyPageState extends State<MonthlyPage> {
     );
   }
 
-  Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight){
+  Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight, Color color){
 
-    TextStyle style = TextStyle(fontSize: fontSize, fontWeight: fontWeight);
+    TextStyle style = TextStyle(
+      fontSize: fontSize, 
+      fontWeight: fontWeight,
+      color: color
+    );
     if(text.startsWith("+")){
-      style = TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: Colors.lightGreen);
+      style = TextStyle(
+        fontSize: fontSize, 
+        fontWeight: fontWeight, 
+        color: Colors.lightGreen
+      );
     }
     if(text.startsWith("-")){
-      style = TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: Colors.red);
+      style = TextStyle(
+        fontSize: fontSize, 
+        fontWeight: fontWeight, 
+        color: Colors.red
+      );
     }
     return Row(
       children: <Widget>[
@@ -150,7 +163,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
         Padding(
           padding: EdgeInsets.only(left: 10,bottom: 10),
           child: 
-            createField(pair.getMonthAndYear(), 25, TextAlign.start, FontWeight.bold),
+            createField(pair.getMonthAndYear(), 25, TextAlign.start, FontWeight.bold, Colors.lightBlueAccent),
         )
       ],
     );
@@ -175,8 +188,8 @@ class _MonthlyPageState extends State<MonthlyPage> {
                         width: 90,
                         child: Column(
                           children: <Widget>[
-                            createField("Real:", 18, TextAlign.start, FontWeight.normal),
-                            createField("Teórico:", 18, TextAlign.start, FontWeight.normal),
+                            createField("Real:", 18, TextAlign.start, FontWeight.normal, Colors.white),
+                            createField("Teórico:", 18, TextAlign.start, FontWeight.normal, Colors.white),
                           ],
                         ),
                       )
@@ -192,8 +205,8 @@ class _MonthlyPageState extends State<MonthlyPage> {
                         width: 150,
                         child: Column(
                           children: <Widget>[
-                            createField(pair.hours, 18, TextAlign.start, FontWeight.bold),
-                            createField(pair.laborHours, 18, TextAlign.start, FontWeight.bold),
+                            createField(pair.hours, 18, TextAlign.start, FontWeight.bold ,Colors.white),
+                            createField(pair.laborHours, 18, TextAlign.start, FontWeight.bold ,Colors.white),
                           ],
                         ),
                       )
@@ -203,7 +216,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
               ),
               Column(
                 children: <Widget>[
-                  createField(pair.getDifference(), 18, TextAlign.start, FontWeight.bold),
+                  createField(pair.getDifference(), 18, TextAlign.start, FontWeight.bold ,Colors.white),
                 ]
               ),
             ],
@@ -233,46 +246,7 @@ class Model {
 
   String getMonthAndYear(){
 
-    String month = "";
-    switch (this.month) {
-      case 1:
-        month = "Enero";
-        break;
-      case 2:
-        month = "Febrero";
-        break;
-      case 3:
-        month = "Marzo";
-        break;
-      case 4:
-        month = "Abril";
-        break;
-      case 5:
-        month = "Mayo";
-        break;
-      case 6:
-        month = "Junio";
-        break;
-      case 7:
-        month = "Julio";
-        break;
-      case 8:
-        month = "Agosto";
-        break;
-      case 9:
-        month = "Septiembre";
-        break;
-      case 10:
-        month = "Octubre";
-        break;
-      case 11:
-        month = "Noviembre";
-        break;
-      case 12:
-        month = "Diciembre";
-        break;
-      default:
-    }
+    String month = getMonthAsString(this.month);
     return month + " " + this.year.toString();
   }
 
