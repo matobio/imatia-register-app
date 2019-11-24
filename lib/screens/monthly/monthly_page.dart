@@ -270,7 +270,7 @@ class Model {
     diff = difference > 0 ? "+":"-";
 
     int differenceInHours = difference ~/ 60;
-    int differenceInMinutes = (difference % 60).toInt();
+    int differenceInMinutes = (difference.abs() % 60).toInt();
 
     diff = diff + differenceInHours.toString().replaceAll("-", "") + "h " + differenceInMinutes.toString() + "min";
 

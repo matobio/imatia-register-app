@@ -42,15 +42,19 @@ void logout(BuildContext context) async {
 Future<bool> checkLogin() async {
 
   
-  await oauth.loadTokenToCache();
-  // String accessToken = await oauth.getAccessToken();
-  // int employeeId = await getEmployeeIdFromUserMail(accessToken);
-
-  // if(employeeId == null){
-  //   return false;
+  // await oauth.loadTokenToCache();
+  // if(oauth.tokenIsValid()){
+  //   return true;
   // }
-  if(oauth.tokenIsValid()){
+  // return false;
+  
+  /* Hago un query cualquiera para saber si estamos logueados*/
+  Map<String,dynamic> result = await getEmployeeTimes(0, 1);
+  if(result == null || result['code'] != 0){
+    return false;
+  }
+  if(result['code'] == 0){
     return true;
   }
-  return true;
+  return false;
 }
