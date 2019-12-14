@@ -1,4 +1,4 @@
-import 'package:imatia_register_app/resources/utils/Constants.dart';
+import '../utils/Constants.dart';
 import 'model/config.dart';
 
 final String tennant = "common";

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:imatia_register_app/resources/utils/EmployeeDataGetter.dart';
+import '../../resources/utils/EmployeeDataGetter.dart';
 import '../drawer.dart';
 import 'TimeModel.dart';
 import 'times_detail_page.dart';

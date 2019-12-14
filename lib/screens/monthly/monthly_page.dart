@@ -1,7 +1,7 @@
-import 'package:imatia_register_app/resources/utils/DateTimeUtils.dart';
-import 'package:imatia_register_app/resources/utils/EmployeeDataGetter.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
+import '../../resources/utils/DateTimeUtils.dart';
+import '../../resources/utils/EmployeeDataGetter.dart';
 
 class MonthlyPage extends StatefulWidget {
   MonthlyPage({Key key, this.title}) : super(key: key);

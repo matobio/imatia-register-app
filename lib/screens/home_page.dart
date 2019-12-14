@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imatia_register_app/resources/utils/AppUtils.dart';
-import 'package:imatia_register_app/resources/utils/Login.dart';
+import '../resources/utils/AppUtils.dart';
+import '../resources/utils/Login.dart';
 import 'counter/counter_page.dart';
-import '../resources/oauth/aad_oauth.dart';
-import '../resources/oauth/microsoft-oauth_config.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -15,8 +13,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  final AadOAuth oauth = new AadOAuth(config);
 
   @override
   void initState() {

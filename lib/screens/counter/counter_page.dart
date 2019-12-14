@@ -1,9 +1,9 @@
-import 'package:imatia_register_app/resources/utils/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../drawer.dart';
-import '../../resources/utils/EmployeeDataGetter.dart';
 import 'dart:async';
+import '../drawer.dart';
+import '../../resources/utils/Login.dart';
+import '../../resources/utils/EmployeeDataGetter.dart';
 
 
 class CounterPage extends StatefulWidget {

@@ -1,5 +1,5 @@
-import 'package:imatia_register_app/resources/utils/DateTimeUtils.dart';
 import 'package:intl/intl.dart';
+import '../../resources/utils/DateTimeUtils.dart';
 
 class TimeModel {
    int presenceControlHoursId;

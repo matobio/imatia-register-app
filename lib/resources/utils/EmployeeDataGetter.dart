@@ -46,6 +46,9 @@ Future<Map<String,dynamic>> getEmployeeTimes(int offset, int pageSize) async{
 
   int employeeId = await getEmployeeId();
   String accessToken = await getToken();
+  if(employeeId == null || accessToken == null){
+    return null;
+  }
 
   Map<String, dynamic> params = {
     "entity" : ENTITY_EMPLOYEE_PRESENCE_CONTROL_HOURS,
@@ -228,15 +231,23 @@ Future<Map<String,dynamic>> getEmployeeTimesBetween(DateTime initDate, DateTime 
       "token" : accessToken,
       "@basic_expression":{
         "lop":{	
-          "lop":"init_date",
-          "op": ">=",
-          "rop": initDate.millisecondsSinceEpoch
+            "lop":"init_date",
+            "op": ">=",
+            "rop": initDate.millisecondsSinceEpoch
         },
         "op": "AND",
         "rop":{
-          "lop":"end_date",
-          "op": "<=",
-          "rop": endDate.millisecondsSinceEpoch
+            "lop":{
+                "lop":"end_date",
+                "op": "<=",
+                "rop": endDate.millisecondsSinceEpoch
+            },
+            "op": "OR",
+            "rop": {
+                "lop":"end_date",
+                "op": "IS NULL",
+                "rop": null
+            }
         }
     }
     },
@@ -261,10 +272,8 @@ Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDat
 
   List<DayHours> result = new List();
 
-
   Map<String,dynamic> data = await getEmployeeTimesBetween(initDate, endDate);
   if(data != null && data["code"] == 0){
-
 
     List<dynamic> list = data['data']['presence_control_hours_id'];
     list = list == null ? new List() : list;
@@ -272,15 +281,19 @@ Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDat
 
       DateTime date = DateTime.fromMillisecondsSinceEpoch(data['data']['init_date'][i]);
       
-      if(result.where((e)=>e.weekday == date.weekday).length == 0){
+      // Se hace esta comprobacion por si pudiera venir una hora sin fecha fin
+      if(date.millisecondsSinceEpoch >= initDate.millisecondsSinceEpoch && date.millisecondsSinceEpoch <= endDate.millisecondsSinceEpoch){
+        if(result.where((e)=>e.weekday == date.weekday).length == 0){
 
-        String hoursOfDayString = data['data']['hours_day'][i];
-        int hours = int.parse(hoursOfDayString.split("h")[0].trim());
-        int minutes = int.parse(hoursOfDayString.split("h")[1].replaceAll("min", "").trim());
+          String hoursOfDayString = data['data']['hours_day'][i];
+          int hours = int.parse(hoursOfDayString.split("h")[0].trim());
+          int minutes = int.parse(hoursOfDayString.split("h")[1].replaceAll("min", "").trim());
 
-        double totalHours = hours + minutes / 60.0;
-
-        result.add(DayHours(date.weekday, num.parse(totalHours.toStringAsFixed(2))));
+          double totalHours = hours + minutes / 60.0;
+          if(totalHours >= 0){
+            result.add(DayHours(date.weekday, num.parse(totalHours.toStringAsFixed(2))));
+          }
+        }
       }
     } 
   }

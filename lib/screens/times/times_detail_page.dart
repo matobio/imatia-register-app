@@ -1,14 +1,13 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:imatia_register_app/resources/utils/AppUtils.dart';
-import 'package:imatia_register_app/resources/utils/EmployeeDataGetter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../../resources/utils/AppUtils.dart';
+import '../../resources/utils/EmployeeDataGetter.dart';
 
 import 'TimeModel.dart';
 
 const appName = 'DateTimeField Example';
-
 
 
 class InsertTimePage extends StatefulWidget {

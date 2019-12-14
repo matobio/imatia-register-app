@@ -19,6 +19,9 @@ Future<int> getEmployeeId() async {
   final storage = new FlutterSecureStorage();
   String employeeId = await storage.read(key: "employee_id");
 
+  if(employeeId == null){
+    return null;
+  }
   return int.parse(employeeId);
 }
 
