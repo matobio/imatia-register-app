@@ -6,7 +6,7 @@ import 'LocalStorageUtils.dart';
 
 
 
- String _mapToQueryParams(Map<String, String> params) {
+String _mapToQueryParams(Map<String, String> params) {
   final queryParams = <String>[];
   params
       .forEach((String key, String value) => queryParams.add("$key=$value"));
@@ -53,6 +53,7 @@ Future<Map<String,dynamic>> getEmployeeTimes(int offset, int pageSize) async{
   Map<String, dynamic> params = {
     "entity" : ENTITY_EMPLOYEE_PRESENCE_CONTROL_HOURS,
     "kv" : {
+      "IdEmpleado" : employeeId,
       "employee_id" : employeeId,
       "token" : accessToken
     },
@@ -67,10 +68,10 @@ Future<Map<String,dynamic>> getEmployeeTimes(int offset, int pageSize) async{
     headers: {"Content-Type" : "application/json"}
   );
 
-  Map<String,dynamic> data = json.decode(response.body);
   if(response.statusCode != 200){
     return null;
   }
+  Map<String,dynamic> data = json.decode(response.body);
   return data;
 }
 
@@ -227,6 +228,7 @@ Future<Map<String,dynamic>> getEmployeeTimesBetween(DateTime initDate, DateTime 
   Map<String, dynamic> params = {
     "entity" : ENTITY_EMPLOYEE_PRESENCE_CONTROL_HOURS,
     "kv" : {
+      "IdEmpleado" : employeeId,
       "employee_id" : employeeId,
       "token" : accessToken,
       "@basic_expression":{

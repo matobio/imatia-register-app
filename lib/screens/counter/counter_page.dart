@@ -25,6 +25,7 @@ class _CounterPageState extends State<CounterPage> {
   void initState() {
 
     checkLogin().then((result) async {
+
       if(result == false){
         await login(context);
         _reloadPage();
@@ -300,8 +301,3 @@ class _CounterPageState extends State<CounterPage> {
     return DateFormat('yyyy/MM/dd').format(date);
   }
  }
-
-
-  
-
-

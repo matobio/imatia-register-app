@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             title: Text(
               "Login with Microsoft",
-              style: Theme.of(context).textTheme.headline,
+              style: Theme.of(context).textTheme.headline5,
             ),
           ),
           ListTile(

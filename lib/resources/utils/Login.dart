@@ -49,7 +49,9 @@ Future<bool> checkLogin() async {
   // return false;
   
   /* Hago un query cualquiera para saber si estamos logueados*/
+
   Map<String,dynamic> result = await getEmployeeTimes(0, 1);
+
   if(result == null || result['code'] != 0){
     return false;
   }
