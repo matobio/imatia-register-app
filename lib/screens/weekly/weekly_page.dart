@@ -312,7 +312,7 @@ class StackedBarChart extends StatelessWidget {
           cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
           showMeasures: true,
           measureFormatter: (num value) {
-            return value == null ? '' : value;
+            return value == null ? '' : parseHours(value);
           },
 
         ),

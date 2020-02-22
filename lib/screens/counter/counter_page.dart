@@ -47,7 +47,7 @@ class _CounterPageState extends State<CounterPage> {
       
     Map<String,dynamic> data = await getEmployeeLastTime();
 
-    if(data==null){
+    if(data==null || data['code'] != 0){
       login(context).then((result) {
         _reloadPage();
       });

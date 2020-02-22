@@ -1,5 +1,13 @@
 import 'package:intl/intl.dart';
 
+String parseHours(num hours){
+  if(hours != null){
+    int totalMinutes = ((hours % 1) * 60).toInt();
+    int totalHours = hours.toInt();
+    return totalHours.toString() + "h " + totalMinutes.toString() + "min";
+  }
+  return '';
+}
 int getDayOfYear(DateTime date){
   // final diff = date.difference(new DateTime(date.year, 1, 1, 0, 0));
   // return diff.inDays;

@@ -186,7 +186,7 @@ Future<Map<String,dynamic>> updateTime(int presenceControlHoursId, DateTime init
   return json.decode(response.body);
 }
 
-Future<void> startTiming() async{
+Future<bool> startTiming() async{
 
   int employeeId = await getEmployeeId();
   String accessToken = await getToken();
@@ -200,10 +200,10 @@ Future<void> startTiming() async{
       body: json.encode(params),
       headers: {"Content-Type" : "application/json"});
 
-  return json.decode(response.body);
+  return response.statusCode == 200 && json.decode(response.body)['code'] == 0;
 }
 
-Future<void> stopTiming() async{
+Future<bool> stopTiming() async{
 
   int employeeId = await getEmployeeId();
   String accessToken = await getToken();
@@ -217,7 +217,7 @@ Future<void> stopTiming() async{
       body: json.encode(params),
       headers: {"Content-Type" : "application/json"});
 
-  return json.decode(response.body);
+  return response.statusCode == 200 && json.decode(response.body)['code'] == 0;
 }
 
 Future<Map<String,dynamic>> getEmployeeTimesBetween(DateTime initDate, DateTime endDate) async{
