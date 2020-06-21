@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../drawer.dart';
-import '../../resources/utils/DateTimeUtils.dart';
 import '../../resources/utils/EmployeeDataGetter.dart';
+import '../../resources/utils/MonthlyHours.dart';
 
 class MonthlyPage extends StatefulWidget {
   MonthlyPage({Key key, this.title}) : super(key: key);
@@ -13,24 +13,14 @@ class MonthlyPage extends StatefulWidget {
 }
 
 class _MonthlyPageState extends State<MonthlyPage> {
-
   int offset = 0;
   int pagesize = 20;
   ScrollController _scrollController = new ScrollController();
   bool isLoading = false;
-  List<Model> names = new List();
+  List<MonthlyHours> monthlyHours = new List();
 
-  Future<List<Model>> _queryTimes()  async {
-      
-    Map<String,dynamic> data = await getMonthlyTimes(this.offset, this.pagesize);
-
-    List<Model>  times = new List();
-    List<dynamic> list = data['data']['month_numeric'];
-    list = list == null ? new List() : list;
-    for( var i = 0 ; i < list.length; i++ ) { 
-      times.add(Model( data['data']['year'][i], data['data']['month_numeric'][i], data['data']['labor_hours'][i], data['data']['hours'][i] ));
-    } 
-    return times;
+  Future<List<MonthlyHours>> _queryTimes() async {
+    return await getEmployeeMonthlyTimes(this.offset, this.pagesize);
   }
 
   void _getMoreData() async {
@@ -38,12 +28,12 @@ class _MonthlyPageState extends State<MonthlyPage> {
       setState(() {
         isLoading = true;
       });
-      List<Model>  times = await _queryTimes();
+      List<MonthlyHours> times = await _queryTimes();
       this.offset = this.offset + this.pagesize;
 
       setState(() {
         isLoading = false;
-        names.addAll(times);
+        monthlyHours.addAll(times);
       });
     }
   }
@@ -53,7 +43,8 @@ class _MonthlyPageState extends State<MonthlyPage> {
     this._getMoreData();
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==  _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         _getMoreData();
       }
     });
@@ -75,7 +66,20 @@ class _MonthlyPageState extends State<MonthlyPage> {
       ),
     );
   }
-  
+
+  Widget _buildList() {
+    return ListView.builder(
+      itemCount: monthlyHours.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == monthlyHours.length) {
+          return _buildProgressIndicator();
+        } else {
+          return _buildRow(monthlyHours[index]);
+        }
+      },
+      controller: _scrollController,
+    );
+  }
 
   Widget _buildProgressIndicator() {
     return new Padding(
@@ -89,63 +93,38 @@ class _MonthlyPageState extends State<MonthlyPage> {
     );
   }
 
-  Widget _buildList() {
-    return ListView.builder(
-      itemCount: names.length + 1,
-      itemBuilder: (BuildContext context, int index) {
-        if (index == names.length) {
-          return _buildProgressIndicator();
-        } else {
-          return _buildRow(names[index]);
-        }
-      },
-      controller: _scrollController,
-    );
-  }
-
-  Widget _buildRow(Model pair) {
+  Widget _buildRow(MonthlyHours pair) {
     return Container(
-      child: 
-      Padding(
-        padding: EdgeInsets.only(),
-        child: Column(
-          children: <Widget>[
-            _getMonthRow(pair),
-            _getHoursRow(pair),  
-            Divider(),
-          ],
-        ),
-      )
-      
-    );
+        child: Padding(
+      padding: EdgeInsets.only(),
+      child: Column(
+        children: <Widget>[
+          _getMonthRow(pair),
+          _getHoursRow(pair),
+          Divider(),
+        ],
+      ),
+    ));
   }
 
-  Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight, Color color){
-
-    TextStyle style = TextStyle(
-      fontSize: fontSize, 
-      fontWeight: fontWeight,
-      color: color
-    );
-    if(text.startsWith("+")){
+  Widget createField(String text, double fontSize, TextAlign textAlign,
+      FontWeight fontWeight, Color color) {
+    TextStyle style =
+        TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color);
+    if (text.startsWith("+")) {
       style = TextStyle(
-        fontSize: fontSize, 
-        fontWeight: fontWeight, 
-        color: Colors.lightGreen
-      );
+          fontSize: fontSize, fontWeight: fontWeight, color: Colors.lightGreen);
     }
-    if(text.startsWith("-")){
+    if (text.startsWith("-")) {
       style = TextStyle(
-        fontSize: fontSize, 
-        fontWeight: fontWeight, 
-        color: Colors.red
-      );
+          fontSize: fontSize, fontWeight: fontWeight, color: Colors.red);
     }
     return Row(
       children: <Widget>[
         Container(
           child: Padding(
-            padding: EdgeInsets.only(left : 0.0, top : 2.0, right : 0.0, bottom :2.0),
+            padding:
+                EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
             child: Text(
               text,
               textAlign: textAlign,
@@ -157,21 +136,19 @@ class _MonthlyPageState extends State<MonthlyPage> {
     );
   }
 
-  Widget _getMonthRow(Model pair){
+  Widget _getMonthRow(MonthlyHours pair) {
     return Row(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(left: 10,bottom: 10),
-          child: 
-            createField(pair.getMonthAndYear(), 25, TextAlign.start, FontWeight.bold, Colors.lightBlueAccent),
+          padding: EdgeInsets.only(left: 10, bottom: 10),
+          child: createField(pair.getMonthAndYear(), 25, TextAlign.start,
+              FontWeight.bold, Colors.lightBlueAccent),
         )
       ],
     );
   }
 
-  
-
-  Widget _getHoursRow(Model pair){
+  Widget _getHoursRow(MonthlyHours pair) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -188,8 +165,10 @@ class _MonthlyPageState extends State<MonthlyPage> {
                         width: 90,
                         child: Column(
                           children: <Widget>[
-                            createField("Real:", 18, TextAlign.start, FontWeight.normal, Colors.white),
-                            createField("Teórico:", 18, TextAlign.start, FontWeight.normal, Colors.white),
+                            createField("Real:", 18, TextAlign.start,
+                                FontWeight.normal, Colors.white),
+                            createField("Teórico:", 18, TextAlign.start,
+                                FontWeight.normal, Colors.white),
                           ],
                         ),
                       )
@@ -205,8 +184,10 @@ class _MonthlyPageState extends State<MonthlyPage> {
                         width: 150,
                         child: Column(
                           children: <Widget>[
-                            createField(pair.hours, 18, TextAlign.start, FontWeight.bold ,Colors.white),
-                            createField(pair.laborHours, 18, TextAlign.start, FontWeight.bold ,Colors.white),
+                            createField(pair.realHours, 18, TextAlign.start,
+                                FontWeight.bold, Colors.white),
+                            createField(pair.theoricHours, 18, TextAlign.start,
+                                FontWeight.bold, Colors.white),
                           ],
                         ),
                       )
@@ -214,66 +195,14 @@ class _MonthlyPageState extends State<MonthlyPage> {
                   ),
                 ],
               ),
-              Column(
-                children: <Widget>[
-                  createField(pair.getDifference(), 18, TextAlign.start, FontWeight.bold ,Colors.white),
-                ]
-              ),
+              Column(children: <Widget>[
+                createField(pair.getDifference(), 18, TextAlign.start,
+                    FontWeight.bold, Colors.white),
+              ]),
             ],
           ),
         )
       ],
     );
-  }
-
-
-  
-}
-
-
-class Model {
-   int year;
-   int month;
-   String laborHours;
-   String hours;
-
-  Model(year, month, laborHours, hours){
-    this.year = year;
-    this.month = month;
-    this.laborHours = laborHours;
-    this.hours = hours;
-  }
-
-  String getMonthAndYear(){
-
-    String month = getMonthAsString(this.month);
-    return month + " " + this.year.toString();
-  }
-
-  String getDifference(){
-
-    String  diff = "";
-
-    int realHours = 0;
-    int theoricHours = 0;
-    int realMinutes = 0;
-    int theoricMinutes = 0;
-    try{
-      realHours = int.parse(this.laborHours.split("h")[0]);
-      theoricHours = int.parse(this.hours.split("h")[0]);
-      realMinutes = int.parse(this.laborHours.split("h")[1].replaceAll("min", "").trim());
-      theoricMinutes = int.parse(this.hours.split("h")[1].replaceAll("min", "").trim());
-
-    } catch(Exception){}
-
-    double difference = (theoricHours * 60.0 + theoricMinutes) - (realHours * 60.0 + realMinutes);
-    diff = difference > 0 ? "+":"-";
-
-    int differenceInHours = difference ~/ 60;
-    int differenceInMinutes = (difference.abs() % 60).toInt();
-
-    diff = diff + differenceInHours.toString().replaceAll("-", "") + "h " + differenceInMinutes.toString() + "min";
-
-    return diff;
   }
 }

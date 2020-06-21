@@ -27,10 +27,13 @@ class _TimesPageState extends State<TimesPage> {
     Map<String,dynamic> data = await getEmployeeTimes(this.offset, this.pagesize);
 
     List<TimeModel> times = new List();
-    List<dynamic> list = data['data']['presence_control_hours_id'];
-    for( var i = 0 ; i < list.length; i++ ) { 
-      times.add(TimeModel( data['data']['presence_control_hours_id'][i], data['data']['init_date'][i], data['data']['end_date'][i], data['data']['hours'][i] ));
-    } 
+    if(data !=null){
+
+      List<dynamic> list = data['data']['presence_control_hours_id'];
+      for( var i = 0 ; i < list.length; i++ ) { 
+        times.add(TimeModel( data['data']['presence_control_hours_id'][i], data['data']['init_date'][i], data['data']['end_date'][i], data['data']['hours'][i] ));
+      } 
+    }
     return times;
   }
 
