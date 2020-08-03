@@ -25,6 +25,9 @@ class MonthlyHours {
   }
 
   double _getHoursNumber(String totalHours) {
+    if (totalHours.isEmpty) {
+      return 0;
+    }
     int hours = int.parse(totalHours.split("h")[0]);
     int minutes =
         int.parse(totalHours.split("h")[1].replaceAll("min", "").trim());

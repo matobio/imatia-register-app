@@ -243,20 +243,30 @@ class StackedBarChart extends StatelessWidget {
     data.sort((a, b) => a.month.compareTo(b.month));
 
     int currentYear = DateTime.now().year;
+    int currentMonth = DateTime.now().month;
     int year = data.elementAt(this.pageData.data.length - 1).year;
     int lastMonthId = data.elementAt(this.pageData.data.length - 1).month;
     bool isCurrentYear = year >= currentYear;
 
     String initMonth = data.elementAt(0).getMonthString();
-    // El ultimo mes desde el que calculamos las horas es el mes anterior o Diciembre en caso de que estemos en un año anterior
+    // El ultimo mes desde el que calculamos las horas es el mes anterior o Diciembre en caso de que estemos en un año anterior.
+    // Si estamos en el año actual y estamos en un mes donde aun no hemos registrado tiempos cogemos el ultimo mes, si no el mes anterior.
     String lastMonth = isCurrentYear
-        ? data.elementAt(this.pageData.data.length - 2).getMonthString()
+        ? (currentMonth > lastMonthId
+            ? data.elementAt(this.pageData.data.length - 1).getMonthString()
+            : data.elementAt(this.pageData.data.length - 2).getMonthString())
         : data.elementAt(this.pageData.data.length - 1).getMonthString();
+
+    int lastMonthToCalculate = isCurrentYear
+        ? (currentMonth > lastMonthId
+            ? data.elementAt(this.pageData.data.length - 1).month + 1
+            : data.elementAt(this.pageData.data.length - 1).month)
+        : data.elementAt(this.pageData.data.length - 1).month;
 
     double totalTheoricHours = 0;
     double totalRealHours = 0;
     for (int i = 0; i < data.length; i++) {
-      if (data.elementAt(i).month < lastMonthId || !isCurrentYear) {
+      if (data.elementAt(i).month < lastMonthToCalculate || !isCurrentYear) {
         totalTheoricHours += data.elementAt(i).getTheoricHoursNumber();
         totalRealHours += data.elementAt(i).getRealHoursNumber();
       }
