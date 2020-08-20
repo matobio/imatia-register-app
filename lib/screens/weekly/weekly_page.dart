@@ -253,9 +253,45 @@ class StackedBarChart extends StatelessWidget {
                 ],
               ),
             ],
-          )
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                // color: Colors.blue,
+                padding: EdgeInsets.only(bottom: 5),
+                alignment: AlignmentDirectional.centerStart,
+                child: createFieldHoursRemaining(pageData),
+              ),
+            ],
+          ),
         ],
       ),
+    );
+  }
+
+  Row createFieldHoursRemaining(Model pageData) {
+    double hours = pageData.getRemainingHours();
+
+    Color color = hours > 0 ? Colors.red : Colors.lightGreen;
+
+    String hoursFormatted = pageData.formatHours(hours);
+    hoursFormatted = hours > 0 ? "-" + hoursFormatted : "+" + hoursFormatted;
+
+    return Row(
+      children: <Widget>[
+        Container(
+          child: Padding(
+            padding:
+                EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 2.0),
+            child: Text(
+              hoursFormatted,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 21, fontWeight: FontWeight.bold, color: color),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -406,13 +442,7 @@ class DonutAutoLabelChart extends StatelessWidget {
     List<TotalHours> data = new List();
     double realHours =
         pageData == null ? 0.0 : this.pageData.getTotalWeekHours();
-    double theoricHours = THEORIC_WEEK_HOURS.toDouble();
-    if (this.pageData != null && this.pageData.initDate != null) {
-      if (this.pageData.initDate.month == DateTime.august ||
-          this.pageData.initDate.month == DateTime.august) {
-        theoricHours = THEORIC_WEEK_HOURS_SUMMER.toDouble();
-      }
-    }
+    double theoricHours = pageData.getTheoricWeekHours();
     data.add(TotalHours(1, realHours > theoricHours ? theoricHours : realHours,
         charts.ColorUtil.fromDartColor(Colors.green)));
     data.add(TotalHours(
@@ -454,6 +484,21 @@ class Model {
 
   Model(this.initDate, this.endDate, this.data);
 
+  double getTheoricWeekHours() {
+    double theoricHours = THEORIC_WEEK_HOURS.toDouble();
+    if (this.initDate != null) {
+      if (this.initDate.month == DateTime.july ||
+          this.initDate.month == DateTime.august) {
+        theoricHours = THEORIC_WEEK_HOURS_SUMMER.toDouble();
+      }
+    }
+    return theoricHours;
+  }
+
+  double getRemainingHours() {
+    return this.getTheoricWeekHours() - this.getTotalWeekHours();
+  }
+
   double getTotalWeekHours() {
     double hours = 0.0;
     for (DayHours e in data) {
@@ -465,8 +510,12 @@ class Model {
   String getTotalWeekHoursString() {
     double hours = getTotalWeekHours();
 
-    int differenceInHours = hours.toInt();
-    int differenceInMinutes = ((hours * 60) % 60).toInt();
+    return this.formatHours(hours);
+  }
+
+  String formatHours(double hours) {
+    int differenceInHours = hours.abs().toInt();
+    int differenceInMinutes = ((hours.abs() * 60) % 60).toInt();
 
     return differenceInHours.toString() +
         "h " +

@@ -414,6 +414,10 @@ class StackedBarChart extends StatelessWidget {
             charts.TextStyleSpec(
           color: charts.MaterialPalette.white,
         ),
+        outsideLabelStyleAccessorFn: (MonthlyHours hours, _) =>
+            charts.TextStyleSpec(
+          color: charts.MaterialPalette.white,
+        ),
         colorFn: (MonthlyHours hours, _) =>
             charts.MaterialPalette.blue.shadeDefault.darker,
       ),
