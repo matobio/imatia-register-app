@@ -43,12 +43,10 @@ class _AnnualPageState extends State<AnnualPage> {
 
     super.initState();
 
-    _pageController =
-        PageController(initialPage: this.yearCount, keepPage: false);
+    _pageController = PageController(initialPage: this.yearCount, keepPage: false);
 
     _pageController.addListener(() {
-      if (_pageController.position.pixels ==
-          _pageController.position.maxScrollExtent) {
+      if (_pageController.position.pixels == _pageController.position.maxScrollExtent) {
         _getMoreData();
       }
     });
@@ -85,8 +83,7 @@ class _AnnualPageState extends State<AnnualPage> {
             return Container(
               width: screenSize.width,
               height: screenSize.height,
-              child:
-                  StackedBarChart(listOfTimes[index], index, this.appBarHeight),
+              child: StackedBarChart(listOfTimes[index], index, this.appBarHeight),
             );
           }
         },
@@ -127,10 +124,7 @@ class StackedBarChart extends StatelessWidget {
   }
 
   Widget _getBarChartWidget(BuildContext context) {
-    return Expanded(
-        child: Card(
-            child: Padding(
-                padding: const EdgeInsets.all(10.0), child: _getBarChart())));
+    return Expanded(child: Card(child: Padding(padding: const EdgeInsets.all(10.0), child: _getBarChart())));
   }
 
   Widget _getHeaderData(BuildContext context) {
@@ -173,8 +167,7 @@ class StackedBarChart extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(bottom: 5, top: 5),
                 alignment: AlignmentDirectional.centerStart,
-                child: createField("Año " + this.pageData.year.toString(), 24,
-                    TextAlign.start, FontWeight.bold,
+                child: createField("Año " + this.pageData.year.toString(), 24, TextAlign.start, FontWeight.bold,
                     colorText: Colors.lightBlueAccent),
               ),
             ],
@@ -187,10 +180,8 @@ class StackedBarChart extends StatelessWidget {
                     width: 70,
                     child: Column(
                       children: <Widget>[
-                        createField(
-                            "Real:", 18, TextAlign.start, FontWeight.normal),
-                        createField(
-                            "Teórico:", 18, TextAlign.start, FontWeight.normal),
+                        createField("Real:", 18, TextAlign.start, FontWeight.normal),
+                        createField("Teórico:", 18, TextAlign.start, FontWeight.normal),
                       ],
                     ),
                   )
@@ -205,18 +196,12 @@ class StackedBarChart extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             createField(
-                                pageData == null
-                                    ? ""
-                                    : pageData.getHoursString(
-                                        pageData.getTotalYearRealHours()),
+                                pageData == null ? "" : pageData.getHoursString(pageData.getTotalYearRealHours()),
                                 18,
                                 TextAlign.start,
                                 FontWeight.bold),
                             createField(
-                                pageData == null
-                                    ? ""
-                                    : pageData.getHoursString(
-                                        pageData.getTotalYearTheoricHours()),
+                                pageData == null ? "" : pageData.getHoursString(pageData.getTotalYearTheoricHours()),
                                 18,
                                 TextAlign.start,
                                 FontWeight.bold),
@@ -249,19 +234,25 @@ class StackedBarChart extends StatelessWidget {
     bool isCurrentYear = year >= currentYear;
 
     String initMonth = data.elementAt(0).getMonthString();
-    // El ultimo mes desde el que calculamos las horas es el mes anterior o Diciembre en caso de que estemos en un año anterior.
+    // El ultimo mes desde el que calculamos las horas es el mes anterior (o el mes actual si estamos en el ultimo dia) o Diciembre en
+    // caso de que estemos en un año anterior.
     // Si estamos en el año actual y estamos en un mes donde aun no hemos registrado tiempos cogemos el ultimo mes, si no el mes anterior.
-    String lastMonth = isCurrentYear
-        ? (currentMonth > lastMonthId
-            ? data.elementAt(this.pageData.data.length - 1).getMonthString()
-            : data.elementAt(this.pageData.data.length - 2).getMonthString())
-        : data.elementAt(this.pageData.data.length - 1).getMonthString();
+    String lastMonth;
+    int lastMonthToCalculate;
 
-    int lastMonthToCalculate = isCurrentYear
-        ? (currentMonth > lastMonthId
-            ? data.elementAt(this.pageData.data.length - 1).month + 1
-            : data.elementAt(this.pageData.data.length - 1).month)
-        : data.elementAt(this.pageData.data.length - 1).month;
+    if (isCurrentYear) {
+      if (currentMonth > lastMonthId ||
+          (currentMonth == lastMonthId && isLastLaborableDayOfMonthOrGreater(DateTime.now()))) {
+        lastMonth = data.elementAt(this.pageData.data.length - 1).getMonthString();
+        lastMonthToCalculate = data.elementAt(this.pageData.data.length - 1).month + 1;
+      } else {
+        lastMonth = data.elementAt(this.pageData.data.length - 2).getMonthString();
+        lastMonthToCalculate = data.elementAt(this.pageData.data.length - 1).month;
+      }
+    } else {
+      lastMonth = data.elementAt(this.pageData.data.length - 1).getMonthString();
+      lastMonthToCalculate = data.elementAt(this.pageData.data.length - 1).month;
+    }
 
     double totalTheoricHours = 0;
     double totalRealHours = 0;
@@ -273,15 +264,13 @@ class StackedBarChart extends StatelessWidget {
     }
     double hours = totalRealHours - totalTheoricHours;
     bool positive = hours >= 0;
-    String differenceHours =
-        (positive ? "+" : "-") + this.pageData.getHoursString(hours);
+    String differenceHours = (positive ? "+" : "-") + this.pageData.getHoursString(hours);
 
     return Column(
       children: <Widget>[
         Container(
           child: Padding(
-            padding:
-                EdgeInsets.only(left: 0.0, top: 20, right: 0.0, bottom: 2.0),
+            padding: EdgeInsets.only(left: 0.0, top: 20, right: 0.0, bottom: 2.0),
             child: Row(
               children: <Widget>[
                 Text(
@@ -302,10 +291,7 @@ class StackedBarChart extends StatelessWidget {
         Text(
           differenceHours,
           textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: positive ? Colors.lightGreen : Colors.red),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: positive ? Colors.lightGreen : Colors.red),
         ),
       ],
     );
@@ -327,22 +313,17 @@ class StackedBarChart extends StatelessWidget {
     );
   }
 
-  Widget createField(
-      String text, double fontSize, TextAlign textAlign, FontWeight fontWeight,
-      {Color colorText}) {
+  Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight, {Color colorText}) {
     return Row(
       children: <Widget>[
         Container(
           child: Padding(
-            padding:
-                EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
+            padding: EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
             child: Text(
               text,
               textAlign: textAlign,
               style: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                  color: colorText != null ? colorText : Colors.white),
+                  fontSize: fontSize, fontWeight: fontWeight, color: colorText != null ? colorText : Colors.white),
             ),
           ),
         )
@@ -370,10 +351,8 @@ class StackedBarChart extends StatelessWidget {
       ],
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
-            labelStyle: charts.TextStyleSpec(
-                fontSize: 18, color: charts.MaterialPalette.white),
-            lineStyle:
-                charts.LineStyleSpec(color: charts.MaterialPalette.white)),
+            labelStyle: charts.TextStyleSpec(fontSize: 18, color: charts.MaterialPalette.white),
+            lineStyle: charts.LineStyleSpec(color: charts.MaterialPalette.white)),
       ),
       primaryMeasureAxis: new charts.NumericAxisSpec(
         renderSpec: new charts.GridlineRendererSpec(
@@ -381,8 +360,7 @@ class StackedBarChart extends StatelessWidget {
             fontSize: 18,
             color: charts.MaterialPalette.white,
           ),
-          lineStyle:
-              new charts.LineStyleSpec(color: charts.MaterialPalette.white),
+          lineStyle: new charts.LineStyleSpec(color: charts.MaterialPalette.white),
         ),
         tickProviderSpec: charts.StaticNumericTickProviderSpec(
           <charts.TickSpec<num>>[
@@ -397,8 +375,7 @@ class StackedBarChart extends StatelessWidget {
   }
 
   List<charts.Series<MonthlyHours, String>> _createSeries() {
-    List<MonthlyHours> realHours =
-        this.pageData == null ? new List<MonthlyHours>() : this.pageData.data;
+    List<MonthlyHours> realHours = this.pageData == null ? new List<MonthlyHours>() : this.pageData.data;
     if (realHours != null || realHours.isNotEmpty) {
       realHours.sort((a, b) => a.month.compareTo(b.month));
       realHours = realHours.reversed.toList();
@@ -410,16 +387,13 @@ class StackedBarChart extends StatelessWidget {
         measureFn: (MonthlyHours hours, _) => hours.getRealHoursNumber(),
         data: realHours,
         labelAccessorFn: (MonthlyHours hours, _) => hours.getRealHours(),
-        insideLabelStyleAccessorFn: (MonthlyHours hours, _) =>
-            charts.TextStyleSpec(
+        insideLabelStyleAccessorFn: (MonthlyHours hours, _) => charts.TextStyleSpec(
           color: charts.MaterialPalette.white,
         ),
-        outsideLabelStyleAccessorFn: (MonthlyHours hours, _) =>
-            charts.TextStyleSpec(
+        outsideLabelStyleAccessorFn: (MonthlyHours hours, _) => charts.TextStyleSpec(
           color: charts.MaterialPalette.white,
         ),
-        colorFn: (MonthlyHours hours, _) =>
-            charts.MaterialPalette.blue.shadeDefault.darker,
+        colorFn: (MonthlyHours hours, _) => charts.MaterialPalette.blue.shadeDefault.darker,
       ),
     ];
   }
@@ -444,15 +418,8 @@ class DonutAutoLabelChart extends StatelessWidget {
         ),
         Center(
           child: Text(
-            this.pageData == null
-                ? ""
-                : this
-                    .pageData
-                    .getHoursString(this.pageData.getTotalYearRealHours()),
-            style: TextStyle(
-                fontSize: 12.0,
-                color: Colors.amber,
-                fontWeight: FontWeight.bold),
+            this.pageData == null ? "" : this.pageData.getHoursString(this.pageData.getTotalYearRealHours()),
+            style: TextStyle(fontSize: 12.0, color: Colors.amber, fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -464,12 +431,10 @@ class DonutAutoLabelChart extends StatelessWidget {
     double realHours = this.pageData.getTotalYearRealHours();
     double theoricHours = this.pageData.getTotalYearTheoricHours();
 
-    data.add(TotalHours(1, realHours > theoricHours ? theoricHours : realHours,
-        charts.ColorUtil.fromDartColor(Colors.green)));
     data.add(TotalHours(
-        2,
-        realHours > theoricHours ? 0.0 : theoricHours - realHours,
-        charts.MaterialPalette.gray.shade700));
+        1, realHours > theoricHours ? theoricHours : realHours, charts.ColorUtil.fromDartColor(Colors.green)));
+    data.add(
+        TotalHours(2, realHours > theoricHours ? 0.0 : theoricHours - realHours, charts.MaterialPalette.gray.shade700));
 
     return [
       new charts.Series<TotalHours, int>(
@@ -522,9 +487,6 @@ class Model {
     int differenceInHours = hours.toInt();
     int differenceInMinutes = ((hours * 60) % 60).toInt();
 
-    return differenceInHours.toString() +
-        "h " +
-        differenceInMinutes.toString() +
-        "min";
+    return differenceInHours.toString() + "h " + differenceInMinutes.toString() + "min";
   }
 }

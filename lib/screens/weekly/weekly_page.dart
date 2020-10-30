@@ -72,12 +72,10 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
     super.initState();
 
-    _pageController =
-        PageController(initialPage: this.weekCount, keepPage: false);
+    _pageController = PageController(initialPage: this.weekCount, keepPage: false);
 
     _pageController.addListener(() {
-      if (_pageController.position.pixels ==
-          _pageController.position.maxScrollExtent) {
+      if (_pageController.position.pixels == _pageController.position.maxScrollExtent) {
         _getMoreData();
       }
     });
@@ -151,10 +149,7 @@ class StackedBarChart extends StatelessWidget {
   }
 
   Widget _getBarChartWidget(BuildContext context) {
-    return Expanded(
-        child: Card(
-            child: Padding(
-                padding: const EdgeInsets.all(10.0), child: _getBarChart())));
+    return Expanded(child: Card(child: Padding(padding: const EdgeInsets.all(10.0), child: _getBarChart())));
   }
 
   Widget _getHeaderData() {
@@ -197,11 +192,7 @@ class StackedBarChart extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(bottom: 5),
                 alignment: AlignmentDirectional.centerStart,
-                child: createField(
-                    "Semana " + this.getWeekNumber(this.pageData),
-                    24,
-                    TextAlign.start,
-                    FontWeight.bold),
+                child: createField("Semana " + this.getWeekNumber(this.pageData), 24, TextAlign.start, FontWeight.bold),
               ),
             ],
           ),
@@ -213,10 +204,8 @@ class StackedBarChart extends StatelessWidget {
                     width: 70,
                     child: Column(
                       children: <Widget>[
-                        createField(
-                            "Desde:", 18, TextAlign.start, FontWeight.normal),
-                        createField(
-                            "Hasta:", 18, TextAlign.start, FontWeight.normal),
+                        createField("Desde:", 18, TextAlign.start, FontWeight.normal),
+                        createField("Hasta:", 18, TextAlign.start, FontWeight.normal),
                       ],
                     ),
                   )
@@ -231,19 +220,9 @@ class StackedBarChart extends StatelessWidget {
                         constraints: BoxConstraints(maxWidth: 100),
                         child: Column(
                           children: <Widget>[
-                            createField(
-                                pageData == null
-                                    ? ""
-                                    : pageData.getInitDateFormatted(),
-                                18,
-                                TextAlign.start,
+                            createField(pageData == null ? "" : pageData.getInitDateFormatted(), 18, TextAlign.start,
                                 FontWeight.normal),
-                            createField(
-                                pageData == null
-                                    ? ""
-                                    : pageData.getEndDateFormatted(),
-                                18,
-                                TextAlign.start,
+                            createField(pageData == null ? "" : pageData.getEndDateFormatted(), 18, TextAlign.start,
                                 FontWeight.normal),
                           ],
                         ),
@@ -257,7 +236,6 @@ class StackedBarChart extends StatelessWidget {
           Row(
             children: <Widget>[
               Container(
-                // color: Colors.blue,
                 padding: EdgeInsets.only(bottom: 5),
                 alignment: AlignmentDirectional.centerStart,
                 child: createFieldHoursRemaining(pageData),
@@ -281,13 +259,11 @@ class StackedBarChart extends StatelessWidget {
       children: <Widget>[
         Container(
           child: Padding(
-            padding:
-                EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 2.0),
+            padding: EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 2.0),
             child: Text(
               hoursFormatted,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 21, fontWeight: FontWeight.bold, color: color),
+              style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: color),
             ),
           ),
         )
@@ -311,14 +287,12 @@ class StackedBarChart extends StatelessWidget {
     );
   }
 
-  Widget createField(String text, double fontSize, TextAlign textAlign,
-      FontWeight fontWeight) {
+  Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight) {
     return Row(
       children: <Widget>[
         Container(
           child: Padding(
-            padding:
-                EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
+            padding: EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
             child: Text(
               text,
               textAlign: textAlign,
@@ -349,10 +323,8 @@ class StackedBarChart extends StatelessWidget {
       ],
       domainAxis: charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
-            labelStyle: charts.TextStyleSpec(
-                fontSize: 18, color: charts.MaterialPalette.white),
-            lineStyle:
-                charts.LineStyleSpec(color: charts.MaterialPalette.white)),
+            labelStyle: charts.TextStyleSpec(fontSize: 18, color: charts.MaterialPalette.white),
+            lineStyle: charts.LineStyleSpec(color: charts.MaterialPalette.white)),
       ),
       primaryMeasureAxis: new charts.NumericAxisSpec(
         renderSpec: new charts.GridlineRendererSpec(
@@ -360,8 +332,7 @@ class StackedBarChart extends StatelessWidget {
             fontSize: 18,
             color: charts.MaterialPalette.white,
           ),
-          lineStyle:
-              new charts.LineStyleSpec(color: charts.MaterialPalette.white),
+          lineStyle: new charts.LineStyleSpec(color: charts.MaterialPalette.white),
         ),
         tickProviderSpec: charts.StaticNumericTickProviderSpec(
           <charts.TickSpec<num>>[
@@ -377,8 +348,7 @@ class StackedBarChart extends StatelessWidget {
   }
 
   List<charts.Series<DayHours, String>> _createSeries() {
-    final realHours =
-        this.pageData == null ? new List<DayHours>() : this.pageData.data;
+    final realHours = this.pageData == null ? new List<DayHours>() : this.pageData.data;
 
     return [
       charts.Series<DayHours, String>(
@@ -390,8 +360,7 @@ class StackedBarChart extends StatelessWidget {
         insideLabelStyleAccessorFn: (DayHours hours, _) => charts.TextStyleSpec(
           color: charts.MaterialPalette.white,
         ),
-        colorFn: (DayHours hours, _) =>
-            charts.MaterialPalette.blue.shadeDefault.darker,
+        colorFn: (DayHours hours, _) => charts.MaterialPalette.blue.shadeDefault.darker,
       ),
     ];
   }
@@ -400,9 +369,7 @@ class StackedBarChart extends StatelessWidget {
     if (pageData == null) {
       return "";
     }
-    return pageData.initDate == null
-        ? ""
-        : getWeekOfYear(pageData.initDate).toString();
+    return pageData.initDate == null ? "" : getWeekOfYear(pageData.initDate).toString();
   }
 }
 
@@ -425,13 +392,8 @@ class DonutAutoLabelChart extends StatelessWidget {
         ),
         Center(
           child: Text(
-            this.pageData == null
-                ? ""
-                : this.pageData.getTotalWeekHoursString(),
-            style: TextStyle(
-                fontSize: 15.0,
-                color: Colors.amber,
-                fontWeight: FontWeight.bold),
+            this.pageData == null ? "" : this.pageData.getTotalWeekHoursString(),
+            style: TextStyle(fontSize: 15.0, color: Colors.amber, fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -440,22 +402,18 @@ class DonutAutoLabelChart extends StatelessWidget {
 
   List<charts.Series<TotalHours, int>> _createSampleData() {
     List<TotalHours> data = new List();
-    double realHours =
-        pageData == null ? 0.0 : this.pageData.getTotalWeekHours();
+    double realHours = pageData == null ? 0.0 : this.pageData.getTotalWeekHours();
     double theoricHours = pageData.getTheoricWeekHours();
-    data.add(TotalHours(1, realHours > theoricHours ? theoricHours : realHours,
-        charts.ColorUtil.fromDartColor(Colors.green)));
     data.add(TotalHours(
-        2,
-        realHours > theoricHours ? 0.0 : theoricHours - realHours,
-        charts.MaterialPalette.gray.shade700));
+        1, realHours > theoricHours ? theoricHours : realHours, charts.ColorUtil.fromDartColor(Colors.green)));
+    data.add(
+        TotalHours(2, realHours > theoricHours ? 0.0 : theoricHours - realHours, charts.MaterialPalette.gray.shade700));
 
     return [
       new charts.Series<TotalHours, int>(
         id: 'Hours',
         domainFn: (TotalHours hours, _) => hours.index,
-        measureFn: (TotalHours hours, _) =>
-            hours.hours * 100 / THEORIC_WEEK_HOURS,
+        measureFn: (TotalHours hours, _) => hours.hours * 100 / THEORIC_WEEK_HOURS,
         data: data,
         labelAccessorFn: (TotalHours hours, _) => hours.getHours(),
         colorFn: (TotalHours hours, _) => hours.color,
@@ -487,8 +445,7 @@ class Model {
   double getTheoricWeekHours() {
     double theoricHours = THEORIC_WEEK_HOURS.toDouble();
     if (this.initDate != null) {
-      if (this.initDate.month == DateTime.july ||
-          this.initDate.month == DateTime.august) {
+      if (this.initDate.month == DateTime.july || this.initDate.month == DateTime.august) {
         theoricHours = THEORIC_WEEK_HOURS_SUMMER.toDouble();
       }
     }
@@ -517,10 +474,7 @@ class Model {
     int differenceInHours = hours.abs().toInt();
     int differenceInMinutes = ((hours.abs() * 60) % 60).toInt();
 
-    return differenceInHours.toString() +
-        "h " +
-        differenceInMinutes.toString() +
-        "min";
+    return differenceInHours.toString() + "h " + differenceInMinutes.toString() + "min";
   }
 
   String getInitDateFormatted() {
