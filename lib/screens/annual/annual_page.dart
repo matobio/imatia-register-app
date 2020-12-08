@@ -23,24 +23,16 @@ class _AnnualPageState extends State<AnnualPage> {
   num appBarHeight = 0;
 
   void _getMoreData() async {
-    int year = yearCount;
+    List<MonthlyHours> times = await _getData(yearCount);
 
-    List<MonthlyHours> times = await _getData(year);
-    if (times != null || times.isNotEmpty) {
-      // times.sort((a, b) => a.month.compareTo(b.month));
-      // times = times.reversed.toList();
-    }
-
-    yearCount = yearCount - 1;
     setState(() {
-      listOfTimes.addAll([Model(year, times)]);
+      listOfTimes.addAll([Model(yearCount, times)]);
+      yearCount = yearCount - 1;
     });
   }
 
   @override
   void initState() {
-    this._getMoreData();
-
     super.initState();
 
     _pageController = PageController(initialPage: this.yearCount, keepPage: false);
