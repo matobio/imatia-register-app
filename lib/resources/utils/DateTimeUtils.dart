@@ -115,3 +115,15 @@ DateTime getLastLaborableDayOfMonth(DateTime date) {
 DateTime getLastDayOfMonth(DateTime date) {
   return (date.month < 12) ? new DateTime(date.year, date.month + 1, 0) : new DateTime(date.year + 1, 1, 0);
 }
+
+double getTheoricWorkingHours(int year, int month) {
+  if (year != null && month != null) {
+    if (month == DateTime.july || month == DateTime.august) {
+      return 35;
+    }
+    if (year < 2021) {
+      return 40;
+    }
+  }
+  return 41;
+}

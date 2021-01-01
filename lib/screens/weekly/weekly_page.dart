@@ -7,8 +7,6 @@ import '../../resources/utils/EmployeeDataGetter.dart';
 
 import '../drawer.dart';
 
-const int THEORIC_WEEK_HOURS = 40;
-const int THEORIC_WEEK_HOURS_SUMMER = 35;
 const String KEY_INIT_DATE = "init_date";
 const String KEY_END_DATE = "end_date";
 
@@ -404,16 +402,16 @@ class DonutAutoLabelChart extends StatelessWidget {
     List<TotalHours> data = new List();
     double realHours = pageData == null ? 0.0 : this.pageData.getTotalWeekHours();
     double theoricHours = pageData.getTheoricWeekHours();
-    data.add(TotalHours(
-        1, realHours > theoricHours ? theoricHours : realHours, charts.ColorUtil.fromDartColor(Colors.green)));
-    data.add(
-        TotalHours(2, realHours > theoricHours ? 0.0 : theoricHours - realHours, charts.MaterialPalette.gray.shade700));
+    data.add(TotalHours(1, realHours > theoricHours ? theoricHours : realHours,
+        charts.ColorUtil.fromDartColor(Colors.green), theoricHours));
+    data.add(TotalHours(2, realHours > theoricHours ? 0.0 : theoricHours - realHours,
+        charts.MaterialPalette.gray.shade700, theoricHours));
 
     return [
       new charts.Series<TotalHours, int>(
         id: 'Hours',
         domainFn: (TotalHours hours, _) => hours.index,
-        measureFn: (TotalHours hours, _) => hours.hours * 100 / THEORIC_WEEK_HOURS,
+        measureFn: (TotalHours hours, _) => hours.hours * 100 / hours.theoricWeekHours,
         data: data,
         labelAccessorFn: (TotalHours hours, _) => hours.getHours(),
         colorFn: (TotalHours hours, _) => hours.color,
@@ -426,8 +424,9 @@ class TotalHours {
   final int index;
   final double hours;
   final charts.Color color;
+  final double theoricWeekHours;
 
-  TotalHours(this.index, this.hours, this.color);
+  TotalHours(this.index, this.hours, this.color, this.theoricWeekHours);
 
   String getHours() {
     return hours == 0 ? "" : num.parse(hours.toStringAsFixed(2)).toString();
@@ -443,13 +442,7 @@ class Model {
   Model(this.initDate, this.endDate, this.data);
 
   double getTheoricWeekHours() {
-    double theoricHours = THEORIC_WEEK_HOURS.toDouble();
-    if (this.initDate != null) {
-      if (this.initDate.month == DateTime.july || this.initDate.month == DateTime.august) {
-        theoricHours = THEORIC_WEEK_HOURS_SUMMER.toDouble();
-      }
-    }
-    return theoricHours;
+    return getTheoricWorkingHours(this.initDate.year, this.initDate.month);
   }
 
   double getRemainingHours() {
