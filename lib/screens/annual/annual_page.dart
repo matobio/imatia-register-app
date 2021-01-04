@@ -233,7 +233,8 @@ class StackedBarChart extends StatelessWidget {
     int lastMonthToCalculate;
 
     if (isCurrentYear) {
-      if (currentMonth > lastMonthId ||
+      if (currentMonth == DateTime.january ||
+          currentMonth > lastMonthId ||
           (currentMonth == lastMonthId && isLastLaborableDayOfMonthOrGreater(DateTime.now()))) {
         lastMonth = data.elementAt(this.pageData.data.length - 1).getMonthString();
         lastMonthToCalculate = data.elementAt(this.pageData.data.length - 1).month + 1;
@@ -256,7 +257,7 @@ class StackedBarChart extends StatelessWidget {
     }
     double hours = totalRealHours - totalTheoricHours;
     bool positive = hours >= 0;
-    String differenceHours = (positive ? "+" : "-") + this.pageData.getHoursString(hours);
+    String differenceHours = (positive ? "+" : "") + this.pageData.getHoursString(hours);
 
     return Column(
       children: <Widget>[
