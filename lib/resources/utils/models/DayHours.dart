@@ -10,7 +10,11 @@ class DayHours {
 
   DayHours(this.weekday, this.hours);
 
-  String getHours() {
+  double getHours() {
+    return this.hours;
+  }
+
+  String getHoursFormatted() {
     return hours == 0 ? "" : num.parse(hours.toStringAsFixed(2)).toString();
   }
 

@@ -10,6 +10,14 @@ class WeeklyModel {
 
   WeeklyModel(this.initDate, this.endDate, this.data);
 
+  int getYear() {
+    return initDate.year;
+  }
+
+  int getMonth() {
+    return initDate.month;
+  }
+
   double getTheoricWeekHours() {
     return dateTimeUtils.getTheoricWorkingHours(this.initDate.year, this.initDate.month);
   }

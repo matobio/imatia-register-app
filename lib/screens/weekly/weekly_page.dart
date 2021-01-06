@@ -84,7 +84,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
   }
 
   Future<List<DayHours>> _getData(DateTime initDate, DateTime endDate) async {
-    return await employeesService.getEmployeeTimesMapped(initDate, endDate);
+    return await employeesService.getEmployeeTimesMapped(initDate, endDate, false);
   }
 
   @override

@@ -202,7 +202,44 @@ Future<Map<String, dynamic>> getEmployeeTimesBetween(DateTime initDate, DateTime
   return json.decode(response.body);
 }
 
-Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDate) async {
+Future<int> getTotalDayMilis() async {
+  DateTime now = DateTime.now();
+  DateTime initDate = DateTime(now.year, now.month, now.day, 0, 0);
+  DateTime endDate = DateTime(now.year, now.month, now.day, 23, 59);
+
+  List<DayHours> times = new List();
+
+  Map<String, dynamic> data = await getEmployeeTimesBetween(initDate, endDate);
+  if (data != null && data["code"] == 0) {
+    List<dynamic> list = data['data']['presence_control_hours_id'];
+    list = list == null ? new List() : list;
+    for (var i = 0; i < list.length; i++) {
+      if (data['data']['end_date'][i] == null) {
+        continue;
+      }
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(data['data']['init_date'][i]);
+
+      // Se hace esta comprobacion por si pudiera venir una hora sin fecha fin
+
+      String hoursOfDayString = data['data']['hours'][i];
+      int hours = int.parse(hoursOfDayString.split("h")[0].trim());
+      int minutes = int.parse(hoursOfDayString.split("h")[1].replaceAll("min", "").trim());
+
+      double totalHours = hours + minutes / 60.0;
+      if (totalHours >= 0) {
+        times.add(DayHours(date.weekday, num.parse(totalHours.toStringAsFixed(2))));
+      }
+    }
+  }
+
+  int milis = 0;
+  for (int i = 0; i < times.length; i++) {
+    milis += (times[i].getHours() * 60 * 60 * 1000).toInt();
+  }
+  return milis;
+}
+
+Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDate, bool excludeNoEndTime) async {
   List<DayHours> result = new List();
 
   Map<String, dynamic> data = await getEmployeeTimesBetween(initDate, endDate);
@@ -210,6 +247,9 @@ Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDat
     List<dynamic> list = data['data']['presence_control_hours_id'];
     list = list == null ? new List() : list;
     for (var i = 0; i < list.length; i++) {
+      if (excludeNoEndTime && data['data']['end_date'][i] == null) {
+        continue;
+      }
       DateTime date = DateTime.fromMillisecondsSinceEpoch(data['data']['init_date'][i]);
 
       // Se hace esta comprobacion por si pudiera venir una hora sin fecha fin

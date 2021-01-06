@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/counter/counter_page.dart';
-import '../screens/times/times_page.dart';
-import '../screens/weekly/weekly_page.dart';
-import '../screens/monthly/monthly_page.dart';
-import '../screens/annual/annual_page.dart';
+import '../resources/utils/NavigatorUtils.dart' as navigator;
 import '../resources/utils/login/LoginService.dart' as loginService;
 import '../resources/oauth/aad_oauth.dart';
 import '../resources/oauth/microsoft-oauth_config.dart';
@@ -24,41 +20,12 @@ class _AppDrawerState extends State<AppDrawer> {
           Expanded(
               child: ListView(padding: EdgeInsets.zero, children: <Widget>[
             _createHeader(),
+            _createDrawerItem(icon: Icons.timer, text: 'Contador', onTap: () => navigator.goToCounterPage(context)),
+            _createDrawerItem(icon: Icons.access_time, text: 'Tiempos', onTap: () => navigator.goToTimesPage(context)),
             _createDrawerItem(
-                icon: Icons.timer,
-                text: 'Contador',
-                onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CounterPage(title: "Contador")),
-                    )),
-            _createDrawerItem(
-                icon: Icons.access_time,
-                text: 'Tiempos',
-                onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TimesPage(title: "Tiempos")),
-                    )),
-            _createDrawerItem(
-                icon: Icons.calendar_today,
-                text: 'Mensual',
-                onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MonthlyPage(title: "Mensual")),
-                    )),
-            _createDrawerItem(
-                icon: Icons.assessment,
-                text: 'Semanal',
-                onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WeeklyPage(title: "Semanal")),
-                    )),
-            _createDrawerItem(
-                icon: Icons.sort,
-                text: 'Anual',
-                onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AnnualPage(title: "Anual")),
-                    )),
+                icon: Icons.calendar_today, text: 'Mensual', onTap: () => navigator.goToMonthlyPage(context)),
+            _createDrawerItem(icon: Icons.assessment, text: 'Semanal', onTap: () => navigator.goToWeeklyPage(context)),
+            _createDrawerItem(icon: Icons.sort, text: 'Anual', onTap: () => navigator.goToAnnualPage(context)),
           ])),
           Container(
             alignment: FractionalOffset.bottomCenter,

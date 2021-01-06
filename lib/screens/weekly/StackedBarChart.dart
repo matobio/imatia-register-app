@@ -209,7 +209,27 @@ class StackedBarChart extends StatelessWidget {
           ),
           lineStyle: new charts.LineStyleSpec(color: charts.MaterialPalette.white),
         ),
-        tickProviderSpec: charts.StaticNumericTickProviderSpec(
+        tickProviderSpec: getNumericTickSpec(pageData.getYear(), pageData.getMonth()),
+      ),
+    );
+  }
+
+  charts.StaticNumericTickProviderSpec getNumericTickSpec(int year, int month) {
+    if (year != null && month != null) {
+      if (month == DateTime.july || month == DateTime.august) {
+        return charts.StaticNumericTickProviderSpec(
+          <charts.TickSpec<num>>[
+            charts.TickSpec<num>(0),
+            charts.TickSpec<num>(1),
+            charts.TickSpec<num>(2.5),
+            charts.TickSpec<num>(4),
+            charts.TickSpec<num>(5.5),
+            charts.TickSpec<num>(7),
+          ],
+        );
+      }
+      if (year < 2021) {
+        return charts.StaticNumericTickProviderSpec(
           <charts.TickSpec<num>>[
             charts.TickSpec<num>(0),
             charts.TickSpec<num>(2),
@@ -217,8 +237,18 @@ class StackedBarChart extends StatelessWidget {
             charts.TickSpec<num>(6),
             charts.TickSpec<num>(8),
           ],
-        ),
-      ),
+        );
+      }
+    }
+    return charts.StaticNumericTickProviderSpec(
+      <charts.TickSpec<num>>[
+        charts.TickSpec<num>(0),
+        charts.TickSpec<num>(1),
+        charts.TickSpec<num>(3),
+        charts.TickSpec<num>(5),
+        charts.TickSpec<num>(7),
+        charts.TickSpec<num>(8.5),
+      ],
     );
   }
 
@@ -231,7 +261,7 @@ class StackedBarChart extends StatelessWidget {
         domainFn: (DayHours hours, _) => hours.parseWeekday(),
         measureFn: (DayHours hours, _) => hours.hours,
         data: realHours,
-        labelAccessorFn: (DayHours hours, _) => hours.getHours(),
+        labelAccessorFn: (DayHours hours, _) => hours.getHoursFormatted(),
         insideLabelStyleAccessorFn: (DayHours hours, _) => charts.TextStyleSpec(
           color: charts.MaterialPalette.white,
         ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:imatia_register_app/screens/times/utils/TimeModel.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import '../drawer.dart';
 import '../../resources/utils/login/LoginService.dart' as loginService;
 import '../../resources/utils/EmployeesService.dart' as employeesService;
+import '../../resources/utils/NavigatorUtils.dart' as navigator;
 
 class CounterPage extends StatefulWidget {
   CounterPage({Key key, this.title}) : super(key: key);
@@ -18,6 +20,7 @@ class _CounterPageState extends State<CounterPage> {
   int presenceControlHoursId;
   DateTime initDate, endDate;
   var _result;
+  int totalDayMilis = 0;
 
   @override
   void initState() {
@@ -54,14 +57,13 @@ class _CounterPageState extends State<CounterPage> {
       } else {
         this.endDate = null;
       }
+
+      this.totalDayMilis = await employeesService.getTotalDayMilis();
     }
   }
 
   void _reloadPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CounterPage()),
-    );
+    navigator.goToCounterPage(context);
   }
 
   @override
@@ -79,17 +81,28 @@ class _CounterPageState extends State<CounterPage> {
     }
     return Center(
       child: Container(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-          _createDatesRow(),
-          _getTimerButton(),
-          _createCounterField(),
-        ]),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Container(
+                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
+                _createDatesRow(),
+                _getTimerButton(),
+                _createCounterField(),
+              ])),
+              Container(
+                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
+                _createDayCounterField(),
+              ]))
+            ]),
       ),
     );
   }
 
   Widget _createDatesRow() {
-    return Row(
+    return Container(
+        child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Column(
@@ -125,7 +138,7 @@ class _CounterPageState extends State<CounterPage> {
           ],
         ),
       ],
-    );
+    ));
   }
 
   Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight) {
@@ -149,7 +162,9 @@ class _CounterPageState extends State<CounterPage> {
   }
 
   Widget _createCounterField() {
-    return Row(
+    return Container(
+        // color: Colors.cyan,
+        child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
@@ -160,7 +175,32 @@ class _CounterPageState extends State<CounterPage> {
                   return _createHourText(_getCounterTime());
                 })),
       ],
-    );
+    ));
+  }
+
+  Widget _createDayCounterField() {
+    return Container(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 0.0),
+            child: StreamBuilder(
+                stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+                builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                  return Padding(
+                      padding: EdgeInsets.only(left: 0.0, top: 0.0, right: 0.0, bottom: 0.0),
+                      child: Container(
+                        child: Center(
+                          child: Text(
+                            _getTotalCounterTime(),
+                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.amber),
+                          ),
+                        ),
+                      ));
+                })),
+      ],
+    ));
   }
 
   Widget _createHourText(String text) {
@@ -171,7 +211,7 @@ class _CounterPageState extends State<CounterPage> {
             child: Text(
               text,
               style: TextStyle(
-                fontSize: 60,
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -187,7 +227,8 @@ class _CounterPageState extends State<CounterPage> {
       backgroundColor = Colors.red;
     }
 
-    return Padding(
+    return Container(
+        child: Padding(
       padding: EdgeInsets.symmetric(vertical: 30.0),
       child: Center(
         child: SizedBox(
@@ -208,7 +249,7 @@ class _CounterPageState extends State<CounterPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Future<void> _onPressTimerButton() async {
@@ -223,13 +264,19 @@ class _CounterPageState extends State<CounterPage> {
   }
 
   Future<void> _startTiming() async {
-    await employeesService.startTiming();
-    await _queryTimes();
+    if (await employeesService.startTiming()) {
+      await _queryTimes();
+    } else {
+      _reloadPage();
+    }
   }
 
   Future<void> _stopTiming() async {
-    await employeesService.stopTiming();
-    await _queryTimes();
+    if (await employeesService.stopTiming()) {
+      await _queryTimes();
+    } else {
+      _reloadPage();
+    }
   }
 
   bool _isStopped() {
@@ -242,15 +289,33 @@ class _CounterPageState extends State<CounterPage> {
     }
     Duration difference = DateTime.now().difference(this.initDate);
 
+    return formatToTimer(difference);
+  }
+
+  String formatToTimer(Duration difference) {
     if (difference == null) {
       return "";
     }
-
     String hours = difference.inHours.toString().padLeft(2, '0');
     String minutes = difference.inMinutes.remainder(60).toString().padLeft(2, '0');
     String seconds = difference.inSeconds.remainder(60).toString().padLeft(2, '0');
 
     return "$hours:$minutes:$seconds";
+  }
+
+  String _getTotalCounterTime() {
+    TimeModel date = TimeModel(null, DateTime.now().millisecondsSinceEpoch, null, null, null);
+
+    return date.getDatePretty() + " - " + formatToTimer(calculateTotalDayTime());
+  }
+
+  Duration calculateTotalDayTime() {
+    int milliseconds = this.totalDayMilis;
+    if (!_isStopped()) {
+      Duration time = DateTime.now().difference(this.initDate);
+      milliseconds += time.inMilliseconds;
+    }
+    return Duration(milliseconds: milliseconds);
   }
 
   String _getInitDateHour() {

@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../utils/TimeModel.dart';
+import '../../../resources/utils/NavigatorUtils.dart' as navigator;
 import '../../../resources/utils/AppUtils.dart';
 import '../../../resources/utils/EmployeesService.dart' as employeesService;
 
-import '../utils/TimeModel.dart';
-
 const appName = 'DateTimeField Example';
 
-class InsertTimePage extends StatefulWidget {
-  InsertTimePage({Key key, this.time}) : super(key: key);
+class TimeDetailPage extends StatefulWidget {
+  TimeDetailPage({Key key, this.time}) : super(key: key);
 
   final TimeModel time;
 
   @override
-  _InsertTimePageState createState() => _InsertTimePageState(time);
+  _TimeDetailPageState createState() => _TimeDetailPageState(time);
 }
 
-class _InsertTimePageState extends State<InsertTimePage> {
+class _TimeDetailPageState extends State<TimeDetailPage> {
   final TimeModel time;
   final DateFormat formatDate = DateFormat("yyyy-MM-dd");
   final DateFormat formatHour = DateFormat("HH:mm");
@@ -28,7 +28,7 @@ class _InsertTimePageState extends State<InsertTimePage> {
   final TextEditingController initHourController = TextEditingController();
   final TextEditingController endHourController = TextEditingController();
 
-  _InsertTimePageState(this.time);
+  _TimeDetailPageState(this.time);
 
   bool _isInserting() {
     return this.time == null;
@@ -126,7 +126,8 @@ class _InsertTimePageState extends State<InsertTimePage> {
     } else {
       response = await employeesService.updateTime(this.time.presenceControlHoursId, initDate, endDate);
       if (this._checkResult(response)) {
-        Navigator.pop(context); // Volvemos a la pantalla anterior
+        navigator.goToTimesPage(context);
+        // Navigator.pop(context); // Volvemos a la pantalla anterior
       }
     }
   }

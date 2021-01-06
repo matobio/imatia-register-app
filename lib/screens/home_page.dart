@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../resources/utils/NavigatorUtils.dart' as navigator;
 import '../resources/utils/AppUtils.dart' as AppUtils;
 import '../resources/utils/login/LoginService.dart' as loginService;
-import 'counter/counter_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -57,10 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToFirstPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CounterPage(title: "Contador")),
-    );
+    navigator.goToCounterPage(context);
   }
 
   void _login() async {

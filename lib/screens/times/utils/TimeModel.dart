@@ -6,12 +6,14 @@ class TimeModel {
   int initDate;
   int endDate;
   String hours;
+  String hoursDay;
 
-  TimeModel(presenceControlHoursId, initDate, endDate, hours) {
+  TimeModel(presenceControlHoursId, initDate, endDate, hours, hoursDay) {
     this.presenceControlHoursId = presenceControlHoursId;
     this.initDate = initDate;
     this.endDate = endDate;
     this.hours = hours;
+    this.hoursDay = hoursDay;
   }
 
   String getDate() {
@@ -19,6 +21,10 @@ class TimeModel {
       return "";
     }
     return DateFormat('yyyy/MM/dd').format(DateTime.fromMillisecondsSinceEpoch(this.initDate));
+  }
+
+  String getHoursDay() {
+    return hoursDay == null ? "" : hoursDay;
   }
 
   String getDatePretty() {
