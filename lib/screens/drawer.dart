@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import '../screens/counter/counter_page.dart';
+import '../screens/times/times_page.dart';
 import '../screens/weekly/weekly_page.dart';
-import '../resources/utils/Login.dart';
+import '../screens/monthly/monthly_page.dart';
+import '../screens/annual/annual_page.dart';
+import '../resources/utils/login/LoginService.dart' as loginService;
 import '../resources/oauth/aad_oauth.dart';
 import '../resources/oauth/microsoft-oauth_config.dart';
-import '../screens/annual/annual_page.dart';
-import 'counter/counter_page.dart';
-import 'monthly/monthly_page.dart';
-import 'times/times_page.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -29,40 +29,35 @@ class _AppDrawerState extends State<AppDrawer> {
                 text: 'Contador',
                 onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => CounterPage(title: "Contador")),
+                      MaterialPageRoute(builder: (context) => CounterPage(title: "Contador")),
                     )),
             _createDrawerItem(
                 icon: Icons.access_time,
                 text: 'Tiempos',
                 onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => TimesPage(title: "Tiempos")),
+                      MaterialPageRoute(builder: (context) => TimesPage(title: "Tiempos")),
                     )),
             _createDrawerItem(
                 icon: Icons.calendar_today,
                 text: 'Mensual',
                 onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => MonthlyPage(title: "Mensual")),
+                      MaterialPageRoute(builder: (context) => MonthlyPage(title: "Mensual")),
                     )),
             _createDrawerItem(
                 icon: Icons.assessment,
                 text: 'Semanal',
                 onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => WeeklyPage(title: "Semanal")),
+                      MaterialPageRoute(builder: (context) => WeeklyPage(title: "Semanal")),
                     )),
             _createDrawerItem(
                 icon: Icons.sort,
                 text: 'Anual',
                 onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => AnnualPage(title: "Anual")),
+                      MaterialPageRoute(builder: (context) => AnnualPage(title: "Anual")),
                     )),
           ])),
           Container(
@@ -81,7 +76,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     ],
                   ),
                   onTap: () {
-                    logout(context);
+                    loginService.logout(context);
                   },
                 ),
               ],
@@ -98,25 +93,17 @@ Widget _createHeader() {
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
-          // color: Colors.lime,
           image: DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage(
-                  'lib/resources/images/wallpaper-material-design-2.jpg'))),
+              fit: BoxFit.fill, image: AssetImage('lib/resources/images/wallpaper-material-design-2.jpg'))),
       child: Stack(children: <Widget>[
         Positioned(
             bottom: 12.0,
             left: 16.0,
-            child: Text("",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w500))),
+            child: Text("", style: TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w500))),
       ]));
 }
 
-Widget _createDrawerItem(
-    {IconData icon, String text, GestureTapCallback onTap}) {
+Widget _createDrawerItem({IconData icon, String text, GestureTapCallback onTap}) {
   return ListTile(
     title: Row(
       children: <Widget>[

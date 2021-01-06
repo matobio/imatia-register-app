@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../drawer.dart';
-import '../../resources/utils/EmployeeDataGetter.dart';
-import '../../resources/utils/MonthlyHours.dart';
+import '../../resources/utils/EmployeesService.dart' as employeesService;
+import '../../resources/utils/models/MonthlyHours.dart';
 
 class MonthlyPage extends StatefulWidget {
   MonthlyPage({Key key, this.title}) : super(key: key);
@@ -20,7 +20,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
   List<MonthlyHours> monthlyHours = new List();
 
   Future<List<MonthlyHours>> _queryTimes() async {
-    return await getEmployeeMonthlyTimes(this.offset, this.pagesize);
+    return await employeesService.getEmployeeMonthlyTimes(this.offset, this.pagesize);
   }
 
   void _getMoreData() async {
@@ -43,8 +43,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
     this._getMoreData();
     super.initState();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         _getMoreData();
       }
     });
@@ -107,24 +106,19 @@ class _MonthlyPageState extends State<MonthlyPage> {
     ));
   }
 
-  Widget createField(String text, double fontSize, TextAlign textAlign,
-      FontWeight fontWeight, Color color) {
-    TextStyle style =
-        TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color);
+  Widget createField(String text, double fontSize, TextAlign textAlign, FontWeight fontWeight, Color color) {
+    TextStyle style = TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: color);
     if (text.startsWith("+")) {
-      style = TextStyle(
-          fontSize: fontSize, fontWeight: fontWeight, color: Colors.lightGreen);
+      style = TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: Colors.lightGreen);
     }
     if (text.startsWith("-")) {
-      style = TextStyle(
-          fontSize: fontSize, fontWeight: fontWeight, color: Colors.red);
+      style = TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: Colors.red);
     }
     return Row(
       children: <Widget>[
         Container(
           child: Padding(
-            padding:
-                EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
+            padding: EdgeInsets.only(left: 0.0, top: 2.0, right: 0.0, bottom: 2.0),
             child: Text(
               text,
               textAlign: textAlign,
@@ -141,8 +135,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(left: 10, bottom: 10),
-          child: createField(pair.getMonthAndYear(), 25, TextAlign.start,
-              FontWeight.bold, Colors.lightBlueAccent),
+          child: createField(pair.getMonthAndYear(), 25, TextAlign.start, FontWeight.bold, Colors.lightBlueAccent),
         )
       ],
     );
@@ -165,10 +158,8 @@ class _MonthlyPageState extends State<MonthlyPage> {
                         width: 90,
                         child: Column(
                           children: <Widget>[
-                            createField("Real:", 18, TextAlign.start,
-                                FontWeight.normal, Colors.white),
-                            createField("Teórico:", 18, TextAlign.start,
-                                FontWeight.normal, Colors.white),
+                            createField("Real:", 18, TextAlign.start, FontWeight.normal, Colors.white),
+                            createField("Teórico:", 18, TextAlign.start, FontWeight.normal, Colors.white),
                           ],
                         ),
                       )
@@ -184,10 +175,8 @@ class _MonthlyPageState extends State<MonthlyPage> {
                         width: 150,
                         child: Column(
                           children: <Widget>[
-                            createField(pair.realHours, 18, TextAlign.start,
-                                FontWeight.bold, Colors.white),
-                            createField(pair.theoricHours, 18, TextAlign.start,
-                                FontWeight.bold, Colors.white),
+                            createField(pair.realHours, 18, TextAlign.start, FontWeight.bold, Colors.white),
+                            createField(pair.theoricHours, 18, TextAlign.start, FontWeight.bold, Colors.white),
                           ],
                         ),
                       )
@@ -196,8 +185,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
                 ],
               ),
               Column(children: <Widget>[
-                createField(pair.getDifference(), 18, TextAlign.start,
-                    FontWeight.bold, Colors.white),
+                createField(pair.getDifference(), 18, TextAlign.start, FontWeight.bold, Colors.white),
               ]),
             ],
           ),

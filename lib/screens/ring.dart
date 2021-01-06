@@ -1,9 +1,7 @@
 import 'dart:math';
-
+import 'drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'drawer.dart';
 
 class SpinKitRing extends StatefulWidget {
   const SpinKitRing({
@@ -28,16 +26,14 @@ class SpinKitRing extends StatefulWidget {
   _SpinKitRingState createState() => _SpinKitRingState();
 }
 
-class _SpinKitRingState extends State<SpinKitRing>
-    with SingleTickerProviderStateMixin {
+class _SpinKitRingState extends State<SpinKitRing> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _animation1, _animation2, _animation3;
 
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ??
-        AnimationController(vsync: this, duration: widget.duration);
+    _controller = widget.controller ?? AnimationController(vsync: this, duration: widget.duration);
     _animation1 = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -70,8 +66,7 @@ class _SpinKitRingState extends State<SpinKitRing>
 
   @override
   Widget build(BuildContext context) {
-    final Matrix4 transform = Matrix4.identity()
-      ..rotateZ((_animation1.value) * 5 * pi / 6);
+    final Matrix4 transform = Matrix4.identity()..rotateZ((_animation1.value) * 5 * pi / 6);
     return Scaffold(
       appBar: AppBar(title: Text("")),
       drawer: AppDrawer(),
@@ -91,7 +86,7 @@ class _SpinKitRingState extends State<SpinKitRing>
             ),
           ),
         ),
-      ), 
+      ),
     );
   }
 }

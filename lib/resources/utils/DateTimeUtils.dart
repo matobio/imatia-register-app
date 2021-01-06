@@ -10,9 +10,6 @@ String parseHours(num hours) {
 }
 
 int getDayOfYear(DateTime date) {
-  // final diff = date.difference(new DateTime(date.year, 1, 1, 0, 0));
-  // return diff.inDays;
-
   return int.parse(DateFormat("D").format(date));
 }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../resources/utils/EmployeeDataGetter.dart';
+import '../../resources/utils/EmployeesService.dart' as employeesService;
 import '../drawer.dart';
-import 'TimeModel.dart';
-import 'times_detail_page.dart';
+import 'utils/TimeModel.dart';
+import 'time_detail/times_detail_page.dart';
 
 class TimesPage extends StatefulWidget {
   TimesPage({Key key, this.title}) : super(key: key);
@@ -14,7 +14,6 @@ class TimesPage extends StatefulWidget {
 }
 
 class _TimesPageState extends State<TimesPage> {
-
   int offset = 0;
   int pagesize = 20;
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -22,22 +21,21 @@ class _TimesPageState extends State<TimesPage> {
   bool isLoading = false;
   List<TimeModel> listOfTimes = new List();
 
-  Future<List<TimeModel>> _queryTimes()  async {
-      
-    Map<String,dynamic> data = await getEmployeeTimes(this.offset, this.pagesize);
+  Future<List<TimeModel>> _queryTimes() async {
+    Map<String, dynamic> data = await employeesService.getEmployeeTimes(this.offset, this.pagesize);
 
     List<TimeModel> times = new List();
-    if(data !=null){
-
+    if (data != null) {
       List<dynamic> list = data['data']['presence_control_hours_id'];
-      for( var i = 0 ; i < list.length; i++ ) { 
-        times.add(TimeModel( data['data']['presence_control_hours_id'][i], data['data']['init_date'][i], data['data']['end_date'][i], data['data']['hours'][i] ));
-      } 
+      for (var i = 0; i < list.length; i++) {
+        times.add(TimeModel(data['data']['presence_control_hours_id'][i], data['data']['init_date'][i],
+            data['data']['end_date'][i], data['data']['hours'][i]));
+      }
     }
     return times;
   }
 
-  Future<void> _refreshTimes() async{
+  Future<void> _refreshTimes() async {
     this.offset = 0;
     this.listOfTimes = new List();
     this._getMoreData();
@@ -48,7 +46,7 @@ class _TimesPageState extends State<TimesPage> {
       setState(() {
         isLoading = true;
       });
-      List<TimeModel>  times = await _queryTimes();
+      List<TimeModel> times = await _queryTimes();
       this.offset = this.offset + this.pagesize;
 
       setState(() {
@@ -62,8 +60,9 @@ class _TimesPageState extends State<TimesPage> {
   void initState() {
     this._getMoreData();
     super.initState();
+
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==  _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         _getMoreData();
       }
     });
@@ -95,9 +94,12 @@ class _TimesPageState extends State<TimesPage> {
       ),
     );
   }
-  
-  void navigateToDetailTimePage(TimeModel time){
-    Navigator.push( context, MaterialPageRoute(builder: (context) => InsertTimePage(time: time)), );
+
+  void navigateToDetailTimePage(TimeModel time) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => InsertTimePage(time: time)),
+    );
   }
 
   Widget _buildProgressIndicator() {
@@ -126,9 +128,8 @@ class _TimesPageState extends State<TimesPage> {
     );
   }
 
-  Future<bool> _deleteTime(int presenceControlHoursId, int index) async{
-    
-     bool res = await showDialog(
+  Future<bool> _deleteTime(int presenceControlHoursId, int index) async {
+    bool res = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -136,18 +137,17 @@ class _TimesPageState extends State<TimesPage> {
           content: const Text("Se va a eliminar la entrada de tiempo. ¿Desear continuar?"),
           actions: <Widget>[
             FlatButton(
-              onPressed: ()  {
-                deleteTime(presenceControlHoursId).then((result) {
-                  if(result == true){
-                    setState(() {
-                      listOfTimes.removeAt(index);
-                    });
-                    Navigator.of(context).pop(true);
-                  }
-                });
-              },
-              child: const Text("ACEPTAR")
-            ),
+                onPressed: () {
+                  employeesService.deleteTime(presenceControlHoursId).then((result) {
+                    if (result == true) {
+                      setState(() {
+                        listOfTimes.removeAt(index);
+                      });
+                      Navigator.of(context).pop(true);
+                    }
+                  });
+                },
+                child: const Text("ACEPTAR")),
             FlatButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: const Text("CANCELAR"),
@@ -160,7 +160,6 @@ class _TimesPageState extends State<TimesPage> {
   }
 
   Widget _buildRow(TimeModel pair, int index) {
-
     return Column(
       children: <Widget>[
         getRowWeekDate(pair, index),
@@ -174,78 +173,77 @@ class _TimesPageState extends State<TimesPage> {
           child: Column(
             children: <Widget>[
               InkWell(
-                onTap: (){
+                onTap: () {
                   navigateToDetailTimePage(pair);
                 },
                 child: Container(
-                  child:  Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.topCenter,
-                        child: Row(                        
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 70,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Center(
-                                        child: Text(pair.getInitDate(),
-                                          style: _biggerFont,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(" - ",
-                                          style: _biggerFont,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(pair.getEndDate(),
-                                          style: _biggerFont,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Row(
+                    child: Column(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topCenter,
+                      child: Row(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                height: 70,
+                                padding: EdgeInsets.only(left: 20, right: 20),
+                                child: Row(
                                   children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5,right: 5),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Icon(Icons.arrow_right),
-                                          Text(
-                                            pair.getHours(),
-                                            style:  TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.amber,
-                                              fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-                                        ],
+                                    Center(
+                                      child: Text(
+                                        pair.getInitDate(),
+                                        style: _biggerFont,
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        " - ",
+                                        style: _biggerFont,
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        pair.getEndDate(),
+                                        style: _biggerFont,
                                       ),
                                     ),
                                   ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.arrow_right),
+                                        Text(
+                                          pair.getHours(),
+                                          style: TextStyle(
+                                              fontSize: 18.0, color: Colors.amber, fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                      Container(
-                        height: double.minPositive,
-                        alignment: Alignment.bottomCenter,
-                        child: Divider(),
-                      ),
-                    ],
-                  )
-                ),
+                    ),
+                    Container(
+                      height: double.minPositive,
+                      alignment: Alignment.bottomCenter,
+                      child: Divider(),
+                    ),
+                  ],
+                )),
               ),
             ],
           ),
@@ -254,15 +252,17 @@ class _TimesPageState extends State<TimesPage> {
     );
   }
 
-  Widget getRowWeekDate(TimeModel pair, int index){
-   
-    if(index == 0 || (index >= 1 && this.listOfTimes[index].getInitDateWithoutTime() != this.listOfTimes[index-1].getInitDateWithoutTime())){
+  Widget getRowWeekDate(TimeModel pair, int index) {
+    if (index == 0 ||
+        (index >= 1 &&
+            this.listOfTimes[index].getInitDateWithoutTime() != this.listOfTimes[index - 1].getInitDateWithoutTime())) {
       return Column(
         children: <Widget>[
-           Container(
+          Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 10, top: 5),
-            child: Text(pair.getDatePretty(),
+            child: Text(
+              pair.getDatePretty(),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -273,18 +273,13 @@ class _TimesPageState extends State<TimesPage> {
           Container(
             padding: EdgeInsets.only(left: 6),
             child: Divider(
-              
               thickness: 2,
               color: Colors.cyan,
             ),
           ),
-          
         ],
-      );     
+      );
     }
     return SizedBox.shrink();
   }
-  
 }
-
-

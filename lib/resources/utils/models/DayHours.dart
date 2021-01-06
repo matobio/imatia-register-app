@@ -5,18 +5,16 @@ const String THURSDAY = "J";
 const String FRIDAY = "V";
 
 class DayHours {
-
   int weekday;
   double hours;
 
   DayHours(this.weekday, this.hours);
 
-  String getHours(){
+  String getHours() {
     return hours == 0 ? "" : num.parse(hours.toStringAsFixed(2)).toString();
   }
 
-  String parseWeekday(){
-
+  String parseWeekday() {
     switch (this.weekday) {
       case 1:
         return MONDAY;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../resources/utils/AppUtils.dart';
-import '../resources/utils/Login.dart';
+import '../resources/utils/AppUtils.dart' as AppUtils;
+import '../resources/utils/login/LoginService.dart' as loginService;
 import 'counter/counter_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -13,23 +13,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   void initState() {
-
-    checkLogin().then((result) {
-        if(result == true){
-          _navigateToFirstPage();
-        }
-        else{
-          login(context).then((result){
-            if(result){
-              _navigateToFirstPage(); 
-            }
-          });
-        }
+    loginService.checkLogin().then((result) {
+      if (result == true) {
+        _navigateToFirstPage();
+      } else {
+        loginService.login(context).then((result) {
+          if (result) {
+            _navigateToFirstPage();
+          }
+        });
+      }
     });
-    
+
     super.initState();
   }
 
@@ -52,32 +49,29 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap:_logout,
+            onTap: _logout,
           ),
         ],
       ),
     );
   }
 
-  void _navigateToFirstPage(){
-    Navigator.push( context, MaterialPageRoute(builder: (context) => CounterPage(title: "Contador")), );
+  void _navigateToFirstPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CounterPage(title: "Contador")),
+    );
   }
 
   void _login() async {
-    if(await login(context)){
+    if (await loginService.login(context)) {
       _navigateToFirstPage();
-    }
-    else{
-      showMessage(context, "No se ha podido iniciar sessión");
+    } else {
+      AppUtils.showMessage(context, "No se ha podido iniciar sessión");
     }
   }
 
   void _logout() async {
-    logout(context);
+    loginService.logout(context);
   }
-
 }
-
-
-
-
