@@ -1,10 +1,12 @@
+import '../../app_credentials.dart' as Credentials;
+
 // Redirect URI of the microsoft app
-const String MICROSOFT_OAUTH_REDIRECT_URI = "";
+const String MICROSOFT_OAUTH_REDIRECT_URI = Credentials.MICROSOFT_OAUTH_REDIRECT_URI;
 // Microsoft application id
-const String MICROSOFT_AZURE_APP_ID = "";
+const String MICROSOFT_AZURE_APP_ID = Credentials.MICROSOFT_AZURE_APP_ID;
 
 // Server REST URL
-const String SERVER_REST_URL = "";
+const String SERVER_REST_URL = Credentials.SERVER_REST_URL;
 
 // REST services endpoints
 const String REST_SERVICE_PATH_LOGIN_EMPLOYEE = "/loginEmployees";
