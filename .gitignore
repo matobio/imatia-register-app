@@ -71,5 +71,8 @@
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-lib/resources/utils/Constants.dart
-*Constants.dart
+
+# Ignored files
+./lib/app_credentials.dart
+**app_credentials.dart
+lib/app_credentials.dart
