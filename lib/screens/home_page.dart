@@ -15,17 +15,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
-    loginService.checkLogin().then((result) {
-      if (result == true) {
-        _navigateToFirstPage();
-      } else {
-        loginService.login(context).then((result) {
-          if (result) {
-            _navigateToFirstPage();
-          }
-        });
-      }
-    });
+    loginService.autoLogin(context);
 
     super.initState();
   }

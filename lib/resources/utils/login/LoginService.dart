@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../../screens/home_page.dart';
 import '../../../screens/ring.dart';
 import '../../oauth/aad_oauth.dart';
 import '../../oauth/microsoft-oauth_config.dart';
 import '../LocalStorageUtils.dart';
 import '../EmployeesService.dart' as employeesService;
 import '../AppUtils.dart' as AppUtils;
+import '../NavigatorUtils.dart' as navigator;
 
 final AadOAuth oauth = new AadOAuth(config);
 
 Future<bool> login(BuildContext context) async {
   try {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => SpinKitRing(
-                color: Colors.white,
-              )),
-    );
+    navigator.goTo(
+        context,
+        SpinKitRing(
+          color: Colors.white,
+        ));
 
     // final AadOAuth oauth = new AadOAuth(config);
     String accessToken = await oauth.getAccessToken();
@@ -40,10 +38,7 @@ Future<bool> login(BuildContext context) async {
 void logout(BuildContext context) async {
   await oauth.logout();
   cleanStorage();
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => MyHomePage()),
-  );
+  navigator.goToHomePage(context);
   AppUtils.showMessage(context, "Logged out");
 }
 
@@ -65,4 +60,18 @@ Future<bool> checkLogin() async {
     return true;
   }
   return false;
+}
+
+void autoLogin(BuildContext context) {
+  checkLogin().then((result) {
+    if (result == true) {
+      navigator.goToCounterPage(context);
+    } else {
+      login(context).then((result) {
+        if (result) {
+          navigator.goToCounterPage(context);
+        }
+      });
+    }
+  });
 }

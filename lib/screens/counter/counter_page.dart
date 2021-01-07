@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:imatia_register_app/screens/times/utils/TimeModel.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import '../drawer.dart';
+import '../../screens/times/utils/TimeModel.dart';
 import '../../resources/utils/login/LoginService.dart' as loginService;
 import '../../resources/utils/EmployeesService.dart' as employeesService;
 import '../../resources/utils/NavigatorUtils.dart' as navigator;
+import '../../resources/utils/DateTimeUtils.dart' as dateTimeUtils;
 
 class CounterPage extends StatefulWidget {
   CounterPage({Key key, this.title}) : super(key: key);
@@ -334,17 +335,10 @@ class _CounterPageState extends State<CounterPage> {
   }
 
   String _getInitDate() {
-    return _formatDate(this.initDate);
+    return dateTimeUtils.formatDate(this.initDate);
   }
 
   String _getEndDate() {
-    return _formatDate(this.endDate);
-  }
-
-  String _formatDate(DateTime date) {
-    if (date == null) {
-      return "";
-    }
-    return DateFormat('yyyy/MM/dd').format(date);
+    return dateTimeUtils.formatDate(this.endDate);
   }
 }

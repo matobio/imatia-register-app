@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../resources/utils/NavigatorUtils.dart' as navigator;
 import '../../resources/utils/EmployeesService.dart' as employeesService;
 import '../drawer.dart';
 import 'utils/TimeModel.dart';
@@ -96,10 +97,7 @@ class _TimesPageState extends State<TimesPage> {
   }
 
   void navigateToDetailTimePage(TimeModel time) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => TimeDetailPage(time: time)),
-    );
+    navigator.goTo(context, TimeDetailPage(time: time));
   }
 
   Widget _buildProgressIndicator() {

@@ -1,5 +1,12 @@
 import 'package:intl/intl.dart';
 
+String formatDate(DateTime date) {
+  if (date == null) {
+    return "";
+  }
+  return DateFormat('yyyy/MM/dd').format(date);
+}
+
 String parseHours(num hours) {
   if (hours != null) {
     int totalMinutes = ((hours % 1) * 60).toInt();
