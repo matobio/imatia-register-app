@@ -20,7 +20,7 @@ class WeeklyPage extends StatefulWidget {
 class _WeeklyPageState extends State<WeeklyPage> {
   PageController _pageController;
 
-  List<WeeklyModel> listOfTimes = new List();
+  List<WeeklyModel> listOfTimes = [];
   int weekCount = 0;
 
   Map<String, DateTime> _getDates() {

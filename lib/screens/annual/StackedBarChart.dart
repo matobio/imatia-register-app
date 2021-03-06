@@ -277,7 +277,7 @@ class StackedBarChart extends StatelessWidget {
   }
 
   List<charts.Series<MonthlyHours, String>> _createSeries() {
-    List<MonthlyHours> realHours = this.pageData == null ? new List<MonthlyHours>() : this.pageData.data;
+    List<MonthlyHours> realHours = this.pageData == null ? [] : this.pageData.data;
     if (realHours != null || realHours.isNotEmpty) {
       realHours.sort((a, b) => a.month.compareTo(b.month));
       realHours = realHours.reversed.toList();

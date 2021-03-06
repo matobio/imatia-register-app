@@ -31,7 +31,7 @@ class DonutAutoLabelChart extends StatelessWidget {
   }
 
   List<charts.Series<TotalHours, int>> _createSampleData() {
-    List<TotalHours> data = new List();
+    List<TotalHours> data = [];
 
     double realHours = pageData == null ? 0.0 : this.pageData.getTotalWeekHours();
     double theoricHours = pageData.getTheoricWeekHours();

@@ -207,12 +207,12 @@ Future<int> getTotalDayMilis() async {
   DateTime initDate = DateTime(now.year, now.month, now.day, 0, 0);
   DateTime endDate = DateTime(now.year, now.month, now.day, 23, 59);
 
-  List<DayHours> times = new List();
+  List<DayHours> times = [];
 
   Map<String, dynamic> data = await getEmployeeTimesBetween(initDate, endDate);
   if (data != null && data["code"] == 0) {
     List<dynamic> list = data['data']['presence_control_hours_id'];
-    list = list == null ? new List() : list;
+    list = list == null ? [] : list;
     for (var i = 0; i < list.length; i++) {
       if (data['data']['end_date'][i] == null) {
         continue;
@@ -240,12 +240,12 @@ Future<int> getTotalDayMilis() async {
 }
 
 Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDate, bool excludeNoEndTime) async {
-  List<DayHours> result = new List();
+  List<DayHours> result = [];
 
   Map<String, dynamic> data = await getEmployeeTimesBetween(initDate, endDate);
   if (data != null && data["code"] == 0) {
     List<dynamic> list = data['data']['presence_control_hours_id'];
-    list = list == null ? new List() : list;
+    list = list == null ? [] : list;
     for (var i = 0; i < list.length; i++) {
       if (excludeNoEndTime && data['data']['end_date'][i] == null) {
         continue;
@@ -284,9 +284,9 @@ Future<List<DayHours>> getEmployeeTimesMapped(DateTime initDate, DateTime endDat
 Future<List<MonthlyHours>> getEmployeeMonthlyTimes(int offset, int pagesize) async {
   Map<String, dynamic> data = await getMonthlyTimes(offset, pagesize);
 
-  List<MonthlyHours> times = new List();
+  List<MonthlyHours> times = [];
   List<dynamic> list = data['data']['month_numeric'];
-  list = list == null ? new List() : list;
+  list = list == null ? [] : list;
   for (var i = 0; i < list.length; i++) {
     times.add(MonthlyHours(data['data']['year'][i], data['data']['month_numeric'][i], data['data']['labor_hours'][i],
         data['data']['hours'][i]));
@@ -295,7 +295,7 @@ Future<List<MonthlyHours>> getEmployeeMonthlyTimes(int offset, int pagesize) asy
 }
 
 Future<List<MonthlyHours>> getEmployeeAnnualTimesMapped(int year) async {
-  List<MonthlyHours> result = new List();
+  List<MonthlyHours> result = [];
 
   List<MonthlyHours> data = await getEmployeeMonthlyTimes(0, 999999);
 

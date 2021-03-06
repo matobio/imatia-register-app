@@ -17,7 +17,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
   int pagesize = 20;
   ScrollController _scrollController = new ScrollController();
   bool isLoading = false;
-  List<MonthlyHours> monthlyHours = new List();
+  List<MonthlyHours> monthlyHours = [];
 
   Future<List<MonthlyHours>> _queryTimes() async {
     return await employeesService.getEmployeeMonthlyTimes(this.offset, this.pagesize);

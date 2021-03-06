@@ -20,12 +20,12 @@ class _TimesPageState extends State<TimesPage> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   ScrollController _scrollController = new ScrollController();
   bool isLoading = false;
-  List<TimeModel> listOfTimes = new List();
+  List<TimeModel> listOfTimes = [];
 
   Future<List<TimeModel>> _queryTimes() async {
     Map<String, dynamic> data = await employeesService.getEmployeeTimes(this.offset, this.pagesize);
 
-    List<TimeModel> times = new List();
+    List<TimeModel> times = [];
     if (data != null) {
       List<dynamic> list = data['data']['presence_control_hours_id'];
       for (var i = 0; i < list.length; i++) {
@@ -38,7 +38,7 @@ class _TimesPageState extends State<TimesPage> {
 
   Future<void> _refreshTimes() async {
     this.offset = 0;
-    this.listOfTimes = new List();
+    this.listOfTimes = [];
     this._getMoreData();
   }
 
@@ -134,7 +134,7 @@ class _TimesPageState extends State<TimesPage> {
           title: const Text("Confirmar"),
           content: const Text("Se va a eliminar la entrada de tiempo. ¿Desear continuar?"),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 onPressed: () {
                   employeesService.deleteTime(presenceControlHoursId).then((result) {
                     if (result == true) {
@@ -146,7 +146,7 @@ class _TimesPageState extends State<TimesPage> {
                   });
                 },
                 child: const Text("ACEPTAR")),
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: const Text("CANCELAR"),
             ),

@@ -17,7 +17,7 @@ class AnnualPage extends StatefulWidget {
 class _AnnualPageState extends State<AnnualPage> {
   PageController _pageController;
 
-  List<YearModel> listOfTimes = new List();
+  List<YearModel> listOfTimes = [];
   int yearCount = DateTime.now().year;
   num appBarHeight = 0;
 

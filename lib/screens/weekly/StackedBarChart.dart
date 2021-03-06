@@ -253,7 +253,7 @@ class StackedBarChart extends StatelessWidget {
   }
 
   List<charts.Series<DayHours, String>> _createSeries() {
-    final realHours = this.pageData == null ? new List<DayHours>() : this.pageData.data;
+    final realHours = this.pageData == null ? [] : this.pageData.data;
 
     return [
       charts.Series<DayHours, String>(

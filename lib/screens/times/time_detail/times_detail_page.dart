@@ -93,14 +93,15 @@ class _TimeDetailPageState extends State<TimeDetailPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        RaisedButton(
+        ElevatedButton(
           child: Text(
             text,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          color: color,
+          style: ElevatedButton.styleFrom(
+            primary: color, // background
+            onPrimary: Colors.white, // foreground
+          ),
           onPressed: _buttonAction,
         )
       ],
